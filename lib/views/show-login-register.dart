@@ -64,7 +64,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                       width: 100,
                       height: 30,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, '/register-page');
+                        },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Color.fromRGBO(117, 88, 7, 1.0),
                           side: BorderSide(color: Colors.transparent),
