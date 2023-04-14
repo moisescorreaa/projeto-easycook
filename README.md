@@ -1,4 +1,4 @@
-# task_list
+# projeto-easycook
 
 A new Flutter project.
 
