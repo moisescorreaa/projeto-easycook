@@ -22,12 +22,12 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                   alignment: Alignment.center,
                 ),
               ),
+              SizedBox(height: 20),
               Flexible(
                 child: const Text(
                   "Olá, seja bem vindo",
                   style: TextStyle(
                     fontSize: 24,
-                    // fontFamily: Roboto,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

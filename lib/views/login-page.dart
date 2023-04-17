@@ -15,6 +15,15 @@ class _LoginPageState extends State<LoginPage> {
         color: Color.fromRGBO(255, 203, 73, 1),
         child: Stack(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Image.asset('favicon_transparent_32x32.png'),
+                  margin: EdgeInsets.only(top: 50),
+                ),
+              ],
+            ),
             Center(
               child: SingleChildScrollView(
                 child: Column(
@@ -74,6 +83,31 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Esqueceu sua senha?',
+                          style: TextStyle(
+                            color: Color.fromRGBO(117, 88, 7, 1),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.of(context).pushNamed('/'),
+                          child: Container(
+                            child: Text(
+                              ' Clique aqui',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                     SizedBox(height: 30),
                     Container(
                       width: 300,
@@ -85,17 +119,34 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text("Entrar"),
                       ),
                     ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Ainda não tem uma conta?',
+                          style: TextStyle(
+                            color: Color.fromRGBO(117, 88, 7, 1),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/register-page'),
+                          child: Container(
+                            child: Text(
+                              ' Cadastre-se aqui',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ],
                 ),
-              ),
-            ),
-            Positioned(
-              top: 10,
-              left: 10,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context)
-                    .popAndPushNamed('/show-login-register'),
               ),
             ),
           ],

@@ -1,16 +1,18 @@
 # projeto-easycook
 
-A new Flutter project.
+## Receitas App
+Este aplicativo é um repositório de receitas que permite aos usuários pesquisar, salvar e compartilhar receitas. É uma plataforma para amantes da culinária e pessoas que gostam de experimentar novas receitas.
 
-## Getting Started
+## O aplicativo permite aos usuários:
 
-This project is a starting point for a Flutter application.
+* Buscar receitas por nome, ingredientes ou tipo de prato.
+* Visualizar detalhes da receita, como lista de ingredientes, instruções de preparo e tempo de cozimento.
+* Adicionar receitas aos favoritos para acessar facilmente mais tarde.
+* Compartilhar receitas com amigos através de redes sociais.
+* Tecnologias utilizadas
 
-A few resources to get you started if this is your first Flutter project:
+## O aplicativo foi construído utilizando as seguintes tecnologias:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Flutter
+* Dart
+* Firebase

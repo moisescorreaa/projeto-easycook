@@ -24,10 +24,15 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void popUpTerms() {
+    ListView(
+      children: [],
+    );
     QuickAlert.show(
         context: context,
-        title: 'Termos',
-        text: 'Exemplo termos',
+        title:
+            'Bem-vindo ao nosso aplicativo!\n Antes de começar a usar nosso serviço, leia atentamente estes termos de uso que regem o uso do nosso aplicativo e quaisquer outros serviços que possamos oferecer (o "Serviço"). \nAo usar o nosso Serviço, você concorda com estes Termos. Se você não concordar com estes Termos, não use nosso Serviço.',
+        text:
+            'Coleta de dados\n\nNós coletamos informações pessoais do usuário para fornecer o Serviço e melhorar sua experiência no aplicativo. As informações que coletamos podem incluir seu nome, endereço de e-mail, informações de perfil e outras informações que você fornecer.\n\nO uso das informações coletadas é regido pela nossa Política de Privacidade, que você deve ler cuidadosamente antes de utilizar nosso serviço. Nós nos comprometemos a manter suas informações pessoais seguras e protegidas, em conformidade com as normas da Lei Geral de Proteção de Dados (LGPD).\n\nUso do Serviço\n\nO nosso serviço é fornecido "como está" e não fazemos garantias expressas ou implícitas quanto à sua disponibilidade, adequação a um determinado propósito, segurança ou confiabilidade. Você é responsável por garantir que o uso do Serviço esteja em conformidade com as leis e regulamentos aplicáveis.\n\nO nosso Serviço pode permitir que você envie conteúdo, como mensagens, fotos e outros materiais. Ao enviar conteúdo, você garante que tem o direito de fazê-lo e concede a nós uma licença não exclusiva, mundial, livre de royalties, sublicenciável e transferível para usar, reproduzir, distribuir, preparar obras derivadas e exibir publicamente o conteúdo em conexão com o nosso Serviço.\n\nRestrições de Uso\n\nVocê concorda em não utilizar o nosso Serviço para qualquer finalidade ilegal ou não autorizada, incluindo, mas não se limitando a, a violação de direitos autorais e de propriedade intelectual.\n\nLinks para outros sites\n\nO nosso Serviço pode conter links para sites de terceiros. Não somos responsáveis pelo conteúdo ou práticas de privacidade desses sites. Sugerimos que você leia os termos de uso e a política de privacidade desses sites antes de utilizá-los.\n\nAlterações aos Termos de Uso\n\nPodemos atualizar estes Termos de tempos em tempos. É sua responsabilidade revisar estes Termos periodicamente para verificar se houve alterações. Seu uso continuado do Serviço após a publicação de quaisquer alterações a estes Termos significa que você aceita e concorda com as alterações.\n\nRescisão\n\nPodemos rescindir ou suspender o seu acesso ao Serviço imediatamente, sem aviso prévio ou responsabilidade, por qualquer motivo, incluindo, mas não se limitando a, a violação destes Termos.',
         confirmBtnText: 'Concordar',
         type: QuickAlertType.confirm,
         onConfirmBtnTap: () {
@@ -45,6 +50,15 @@ class _RegisterPageState extends State<RegisterPage> {
         color: Color.fromRGBO(255, 203, 73, 1),
         child: Stack(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Image.asset('favicon_transparent_32x32.png'),
+                  margin: EdgeInsets.only(top: 50),
+                ),
+              ],
+            ),
             Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
@@ -53,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     SizedBox(height: 80),
                     Text(
-                      'Seja Bem-Vindo',
+                      'Cadastro',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Color.fromRGBO(117, 88, 7, 1),
@@ -101,10 +115,23 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: TextFormField(
                         obscureText: !_showPassword,
                         decoration: InputDecoration(
-                          labelText: "Lucas",
+                          labelText: "Senha",
                           labelStyle: TextStyle(
                             color: Color.fromRGBO(117, 88, 7, 1),
                             fontWeight: FontWeight.bold,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _showPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Color.fromRGBO(117, 88, 7, 1),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
+                            },
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -168,7 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: Text(
                               ' termos',
                               style: TextStyle(
-                                color: Color.fromRGBO(59, 44, 0, 1),
+                                color: Colors.red,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -194,7 +221,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an account?',
+                          'Já tem uma conta?',
                           style: TextStyle(
                             color: Color.fromRGBO(117, 88, 7, 1),
                             fontWeight: FontWeight.bold,
@@ -205,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               Navigator.of(context).pushNamed('/login-page'),
                           child: Container(
                             child: Text(
-                              ' Log In',
+                              ' Faça login aqui',
                               style: TextStyle(
                                 color: Colors.red,
                                 fontWeight: FontWeight.bold,
@@ -217,15 +244,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ],
                 ),
-              ),
-            ),
-            Positioned(
-              top: 10,
-              left: 10,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context)
-                    .popAndPushNamed('/show-login-register'),
               ),
             ),
           ],
