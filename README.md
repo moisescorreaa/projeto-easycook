@@ -7,9 +7,8 @@ Este aplicativo é um repositório de receitas que permite aos usuários pesquis
 
 * Buscar receitas por nome, ingredientes ou tipo de prato.
 * Visualizar detalhes da receita, como lista de ingredientes, instruções de preparo e tempo de cozimento.
-* Adicionar receitas aos favoritos para acessar facilmente mais tarde.
-* Compartilhar receitas com amigos através de redes sociais.
-* Tecnologias utilizadas
+* Curtir receitas.
+* Compartilhar receitas com amigos.
 
 ## O aplicativo foi construído utilizando as seguintes tecnologias:
 
