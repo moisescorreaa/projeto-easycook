@@ -16,15 +16,10 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.asset(
-                      'assets/default_transparent_765x625.png',
-                      fit: BoxFit.cover,
-                      alignment: Alignment.center,
-                    ),
-                  ],
+                child: Image.asset(
+                  'assets/default_transparent_765x625_cropped.png',
+                  fit: BoxFit.contain,
+                  alignment: Alignment.center,
                 ),
               ),
               Flexible(

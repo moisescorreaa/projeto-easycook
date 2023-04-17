@@ -62,7 +62,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/default_765x625.png
-    - assets/default_transparent_765x625.png
+    - assets/default_transparent_765x625_cropped.png
     - assets/default_transparent_1000x1000.png
     - assets/favicon_32x32.png
     - assets/favicon_transparent_32x32.png

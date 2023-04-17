@@ -33,10 +33,9 @@ class _RegisterPageState extends State<RegisterPage> {
         onConfirmBtnTap: () {
           setState(() {
             _agreeToTerms = true;
+          });
+          Navigator.pop(context);
         });
-        Navigator.pop(context);
-      }
-    );
   }
 
   @override
@@ -85,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         keyboardType: TextInputType
                             .emailAddress, // aparece o @ no teclado
                         decoration: InputDecoration(
-                          labelText: "Boguinha",
+                          labelText: "Email",
                           labelStyle: TextStyle(
                             color: Color.fromRGBO(117, 88, 7, 1),
                             fontWeight: FontWeight.bold,
@@ -169,7 +168,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: Text(
                               ' termos',
                               style: TextStyle(
-                                color:  Color.fromRGBO(59, 44, 0, 1),
+                                color: Color.fromRGBO(59, 44, 0, 1),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
