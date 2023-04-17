@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: TextFormField(
                         obscureText: !_showPassword,
                         decoration: InputDecoration(
-                          labelText: "Password",
+                          labelText: "Lucas",
                           labelStyle: TextStyle(
                             color: Color.fromRGBO(117, 88, 7, 1),
                             fontWeight: FontWeight.bold,
