@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quickalert/quickalert.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -8,6 +9,35 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   bool _showPassword = false;
   bool _agreeToTerms = false;
+
+  void showAlert() {
+    QuickAlert.show(
+        context: context,
+        title: 'Cheque seu email!',
+        confirmBtnText: 'Login',
+        confirmBtnColor: Color.fromRGBO(18, 192, 106, 1),
+        onConfirmBtnTap: () =>
+            Navigator.of(context).popAndPushNamed('/login-page'),
+        text:
+            '\nEstamos animados para acompanhar você nessa jornada culinária!!!\n\nEnviamos uma mensagem para a sua caixa de entrada com um link de confirmação!',
+        type: QuickAlertType.success);
+  }
+
+  void popUpTerms() {
+    QuickAlert.show(
+        context: context,
+        title: 'Termos',
+        text: 'Exemplo termos',
+        confirmBtnText: 'Concordar',
+        type: QuickAlertType.confirm,
+        onConfirmBtnTap: () {
+          setState(() {
+            _agreeToTerms = true;
+        });
+        Navigator.pop(context);
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,9 +132,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               color: Color.fromRGBO(117, 88, 7, 1),
                             ),
                             onPressed: () {
-                              // setState(() {
-                              //   _showPassword = !_showPassword;
-                              // });
+                              setState(() {
+                                _showPassword = !_showPassword;
+                              });
                             },
                           ),
                           border: OutlineInputBorder(
@@ -118,29 +148,73 @@ class _RegisterPageState extends State<RegisterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Checkbox(
-                          value: true,
-                          onChanged: (value) {},
+                          value: _agreeToTerms,
+                          onChanged: (value) {
+                            setState(() {
+                              _agreeToTerms = !_agreeToTerms;
+                            });
+                          },
                           activeColor: Colors.red,
                         ),
                         Text(
-                          'Concordo com os termos',
+                          'Concordo com os',
                           style: TextStyle(
                             color: Color.fromRGBO(117, 88, 7, 1),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () => popUpTerms(),
+                          child: Container(
+                            child: Text(
+                              ' termos',
+                              style: TextStyle(
+                                color:  Color.fromRGBO(59, 44, 0, 1),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                     SizedBox(height: 40),
                     Container(
                       width: 300,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showAlert();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                         ),
                         child: Text("Cadastrar"),
                       ),
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already have an account?',
+                          style: TextStyle(
+                            color: Color.fromRGBO(117, 88, 7, 1),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () =>
+                              Navigator.of(context).pushNamed('/login-page'),
+                          child: Container(
+                            child: Text(
+                              ' Log In',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 ),
