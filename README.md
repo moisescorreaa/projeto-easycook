@@ -1,6 +1,6 @@
 # projeto-easycook
 
-## Receitas App
+## EasyCook App
 Este aplicativo é um repositório de receitas que permite aos usuários pesquisar, salvar e compartilhar receitas. É uma plataforma para amantes da culinária e pessoas que gostam de experimentar novas receitas.
 
 ## O aplicativo permite aos usuários:
