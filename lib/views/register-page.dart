@@ -55,7 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         keyboardType: TextInputType
                             .emailAddress, // aparece o @ no teclado
                         decoration: InputDecoration(
-                          labelText: "Email",
+                          labelText: "Boguinha",
                           labelStyle: TextStyle(
                             color: Color.fromRGBO(117, 88, 7, 1),
                             fontWeight: FontWeight.bold,
