@@ -8,6 +8,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(fontFamily: 'Roboto'),
       routes: {
         '/': (context) => SplashScreen(),
         '/show-login-register': (context) => RegisterLoginPage(),
