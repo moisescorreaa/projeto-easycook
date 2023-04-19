@@ -3,6 +3,7 @@ import 'package:easycook_main/views/show-login-register.dart';
 import 'package:easycook_main/views/splash-screen.dart';
 import 'package:easycook_main/views/login-page.dart';
 import 'package:easycook_main/views/register-page.dart';
+import 'package:easycook_main/views/home-page.dart';
 
 class App extends StatelessWidget {
   @override
@@ -14,6 +15,7 @@ class App extends StatelessWidget {
         '/show-login-register': (context) => RegisterLoginPage(),
         '/login-page': (context) => LoginPage(),
         '/register-page': (context) => RegisterPage(),
+        '/home-page': (context) => HomePage(),
       },
       initialRoute: '/',
     );

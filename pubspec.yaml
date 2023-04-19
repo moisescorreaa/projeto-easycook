@@ -68,6 +68,10 @@ flutter:
     - assets/favicon_32x32.png
     - assets/favicon_transparent_32x32.png
     - assets/success.gif
+    - assets/pizza-margherita.jpg
+    - assets/bolo-chocolate.jpg
+    - assets/lasanha-italiana.jpg
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

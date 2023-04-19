@@ -112,7 +112,9 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       width: 300,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/home-page');
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                         ),
