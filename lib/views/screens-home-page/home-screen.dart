@@ -53,6 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: _postagens.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             child: Column(
               children: [
                 Container(
