@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _postagens[index].imagem,
                   fit: BoxFit.cover,
                   width: 1080,
-                  height: 608,
+                  height: 566,
                 ),
                 // Título da postagem
                 Padding(

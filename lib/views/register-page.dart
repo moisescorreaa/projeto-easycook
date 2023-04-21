@@ -15,6 +15,7 @@ final _confirmarSenhaController = TextEditingController();
 class _RegisterPageState extends State<RegisterPage> {
   bool _showPassword = false;
   bool _agreeToTerms = false;
+  bool _showConfirmPassword = false;
 
   void showAlert() {
     QuickAlert.show(
@@ -132,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             validator: (username) {
                               if (username == null || username.isEmpty) {
-                                return 'Por favor, insira um nome de usuário!';
+                                return 'Por favor, insira um nome de usuário';
                               }
                               return null;
                             }),
@@ -160,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   email.isNotEmpty) {
                                 return ('Por favor, insira um email válido.');
                               } else if (email == null || email.isEmpty) {
-                                return 'Por favor, insira um email!';
+                                return 'Por favor, insira um email';
                               }
                             }),
                       ),
@@ -197,7 +198,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             if (senha == null || senha.isEmpty) {
                               return 'Por favor, insira uma senha';
                             } else if (senha.length < 6) {
-                              return 'Por favor, insira uma senha mais forte!';
+                              return 'Por favor, insira uma senha mais forte';
                             }
                             return null;
                           },
@@ -208,7 +209,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: 300,
                         child: TextFormField(
                             controller: _confirmarSenhaController,
-                            obscureText: !_showPassword,
+                            obscureText: !_showConfirmPassword,
                             decoration: InputDecoration(
                               labelText: "Confirmar senha",
                               labelStyle: TextStyle(
@@ -217,14 +218,15 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _showPassword
+                                  _showConfirmPassword
                                       ? Icons.visibility
                                       : Icons.visibility_off,
                                   color: Color.fromRGBO(117, 88, 7, 1),
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _showPassword = !_showPassword;
+                                    _showConfirmPassword =
+                                        !_showConfirmPassword;
                                   });
                                 },
                               ),
@@ -235,9 +237,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             validator: (confirmarSenha) {
                               if (confirmarSenha == null ||
                                   confirmarSenha.isEmpty) {
-                                return 'Confirme sua senha, por favor!';
-                              } else if (confirmarSenha != _senhaController.text) {
-                                return 'Senhas não conferem!';
+                                return 'Confirme sua senha, por favor';
+                              } else if (confirmarSenha !=
+                                  _senhaController.text) {
+                                return 'Senhas não conferem';
                               }
                               return null;
                             }),
