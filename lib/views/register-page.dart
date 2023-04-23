@@ -307,16 +307,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () =>
+                          TextButton(
+                            onPressed: () =>
                                 Navigator.of(context).pushNamed('/login-page'),
-                            child: Container(
-                              child: Text(
-                                ' Faça login aqui',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            child: Text(
+                              ' Faça login aqui',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )

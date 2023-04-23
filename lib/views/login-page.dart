@@ -117,15 +117,14 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pushNamed('/'),
-                            child: Container(
-                              child: Text(
-                                ' Clique aqui',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          TextButton(
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed('/'),
+                            child: Text(
+                              'Clique aqui',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )
@@ -157,16 +156,14 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context)
+                          TextButton(
+                            onPressed: () => Navigator.of(context)
                                 .pushNamed('/register-page'),
-                            child: Container(
-                              child: Text(
-                                ' Cadastre-se aqui',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            child: Text(
+                              'Cadastre-se aqui',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )
