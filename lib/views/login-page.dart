@@ -12,6 +12,63 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  void showForgotPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color.fromRGBO(255, 203, 73, 1),
+        title: const Text(
+          "Esqueceu a senha?",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color.fromRGBO(117, 88, 7, 1),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Insira o seu email para redefinir a senha.",
+              style: TextStyle(
+                color: Color.fromRGBO(117, 88, 7, 1),
+              ),
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Email",
+                labelStyle: TextStyle(
+                  color: Color.fromRGBO(117, 88, 7, 1),
+                  fontWeight: FontWeight.bold,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Cancelar"),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Color.fromRGBO(117, 88, 7, 1.0),
+              side: BorderSide(color: Colors.transparent),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Enviar"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,8 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           TextButton(
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/'),
+                            onPressed: () => showForgotPasswordDialog(),
                             child: Text(
                               'Clique aqui',
                               style: TextStyle(
