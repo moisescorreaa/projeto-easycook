@@ -10,8 +10,8 @@ class AddScreen extends StatefulWidget {
 class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
+   return Scaffold(
+      backgroundColor:Color(0xFFFFCB49)
     );
   }
 }
