@@ -10,7 +10,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(255, 203, 73, 1.0)),
+        decoration: BoxDecoration(color: Color(0xFFF5F5F5)),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -25,16 +25,22 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               SizedBox(height: 20),
               Flexible(
                 child: const Text(
-                  "Olá, seja bem vindo",
+                  "Olá, seja bem-vindo",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFFD32F2F),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Flexible(
-                child: const Text('Entre com sua conta para continuar'),
+                child: const Text(
+                  'Entre com sua conta para continuar',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               Flexible(
@@ -50,11 +56,17 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                               context, '/login-page');
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red, //cor do botão de "Logar"
+                          primary: Color(0xFFD32F2F),
                         ),
-                        child: Text('Entrar'),
+                        child: Text(
+                          'Entrar',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
+                    SizedBox(width: 10),
                     Container(
                       width: 100,
                       height: 30,
@@ -64,10 +76,16 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
                               context, '/register-page');
                         },
                         style: OutlinedButton.styleFrom(
-                          foregroundColor: Color.fromRGBO(117, 88, 7, 1.0),
-                          side: BorderSide(color: Colors.transparent),
+                          side: BorderSide(
+                            color: Color(0xFF757575),
+                          ),
                         ),
-                        child: Text('Cadastrar'),
+                        child: Text(
+                          'Cadastrar',
+                          style: TextStyle(
+                            color: Color(0xFF757575),
+                          ),
+                        ),
                       ),
                     ),
                   ],

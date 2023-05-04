@@ -48,31 +48,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFFCB49),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xFFFFCB49),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          'EasyCook',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF755807),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.filter_list,
+              color: Color(0xFF755807),
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Receitas mais curtidas',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF755807),
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.filter_list,
-                    color: Color(0xFF755807),
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: _postagens.length,
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -106,9 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 300,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(15),
-                              bottom: Radius.circular(15)),
                           child: Image.asset(
                             _postagens[index].imagem,
                             fit: BoxFit.cover,

@@ -8,10 +8,31 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  String _searchTerm = '';
+
+  void _onSearch(String searchTerm) {
+    setState(() {
+      _searchTerm = searchTerm;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Color(0xFFFFCB49)
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Color(0xFFFFCB49),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          'EasyCook',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF755807),
+          ),
+        ),
+      ),
     );
   }
 }
