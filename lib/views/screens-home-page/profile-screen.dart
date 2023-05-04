@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             user.nome,
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
-           SizedBox(height: 100),
+          SizedBox(height: 100),
           Padding(
             padding: EdgeInsets.all(16.0),
             child: Align(
@@ -121,7 +121,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          
         ],
       ),
     );
