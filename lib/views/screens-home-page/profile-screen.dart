@@ -52,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Color(0xFFFFCB49),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 30),
           CircleAvatar(
@@ -76,7 +76,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           Expanded(
-            // Ocupa todo o espaço restante
             child: Padding(
               padding: EdgeInsets.all(16.0),
               child: GridView.builder(
