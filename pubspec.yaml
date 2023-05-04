@@ -70,7 +70,10 @@ flutter:
     - assets/success.gif
     - assets/pizza-margherita.jpg
     - assets/bolo-chocolate.jpg
-    - assets/lasanha-italiana.jpg
+    - assets/escondidinho-camarao.jpg
+    - assets/mousse-maracuja.jpg
+    - assets/smoothie.png
+    - assets/user.jpeg
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
