@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage> {
       ),
       // Barra de ícones selecionáveis
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Color(0xFF755807),
-        unselectedItemColor: Color(0xFFFFCB49),
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Color(0xFF757575),
         currentIndex: _selectedIndex,
         items: [
           BottomNavigationBarItem(

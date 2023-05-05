@@ -18,7 +18,7 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
               Expanded(
                 child: Image.asset(
                   'assets/default_transparent_765x625_cropped.png',
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                   alignment: Alignment.center,
                 ),
               ),

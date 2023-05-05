@@ -47,10 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFCB49),
+      backgroundColor: Color(0xFFF5F5F5),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFFFCB49),
+        backgroundColor: Color(0xFFF5F5F5),
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -58,14 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF755807),
+            color: Colors.red,
           ),
         ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.filter_list,
-              color: Color(0xFF755807),
+              color: Colors.red,
             ),
             onPressed: () {},
           ),
@@ -122,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF755807),
                               ),
                             ),
                             SizedBox(height: 8),
@@ -130,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               _postagens[index].descricao,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Color(0xFF755807),
                               ),
                             ),
                           ],
@@ -172,10 +170,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Text(
                                 'Ver receita',
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  color: Color(0xFF755807),
-                                ),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
                             ),
                           ],

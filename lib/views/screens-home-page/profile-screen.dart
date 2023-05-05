@@ -50,10 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFFCB49),
+      backgroundColor: Color(0xFFF5F5F5),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFFFCB49),
+        backgroundColor: Color(0xFFF5F5F5),
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF755807),
+            color: Colors.red,
           ),
         ),
       ),
@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 100),
           Container(
             width: double.infinity,
-            color: Color(0xFFFFCB49),
+            color: Color(0xFFF5F5F5),
             padding: EdgeInsets.all(16.0),
             child: Center(
               child: Text(

@@ -86,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromRGBO(255, 203, 73, 1),
+        color: Color(0xFFF5F5F5),
         child: Stack(
           children: [
             Row(
@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         'Cadastro',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color.fromRGBO(117, 88, 7, 1),
+                          color: Colors.red,
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
@@ -124,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: InputDecoration(
                               labelText: 'Nome do usuário',
                               labelStyle: TextStyle(
-                                color: Color.fromRGBO(117, 88, 7, 1),
+                                color: Color(0xFF757575),
                                 fontWeight: FontWeight.bold,
                               ),
                               border: OutlineInputBorder(
@@ -148,7 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: InputDecoration(
                               labelText: "Email",
                               labelStyle: TextStyle(
-                                color: Color.fromRGBO(117, 88, 7, 1),
+                                color: Color(0xFF757575),
                                 fontWeight: FontWeight.bold,
                               ),
                               border: OutlineInputBorder(
@@ -174,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           decoration: InputDecoration(
                             labelText: "Senha",
                             labelStyle: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                             suffixIcon: IconButton(
@@ -182,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 _showPassword
                                     ? Icons.visibility
                                     : Icons.visibility_off,
-                                color: Color.fromRGBO(117, 88, 7, 1),
+                                color: Color(0xFF757575),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -213,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: InputDecoration(
                               labelText: "Confirmar senha",
                               labelStyle: TextStyle(
-                                color: Color.fromRGBO(117, 88, 7, 1),
+                                color: Color(0xFF757575),
                                 fontWeight: FontWeight.bold,
                               ),
                               suffixIcon: IconButton(
@@ -221,7 +221,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   _showConfirmPassword
                                       ? Icons.visibility
                                       : Icons.visibility_off,
-                                  color: Color.fromRGBO(117, 88, 7, 1),
+                                  color: Color(0xFF757575),
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -261,7 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Text(
                             'Concordo com os',
                             style: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -303,7 +303,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Text(
                             'Já tem uma conta?',
                             style: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

@@ -16,12 +16,12 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Color.fromRGBO(255, 203, 73, 1),
+        backgroundColor: Color(0xFFF5F5F5),
         title: const Text(
           "Esqueceu a senha?",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(117, 88, 7, 1),
+            color: Colors.red,
           ),
         ),
         content: Column(
@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
             Text(
               "Insira o seu email para redefinir a senha.",
               style: TextStyle(
-                color: Color.fromRGBO(117, 88, 7, 1),
+                color: Colors.grey,
               ),
             ),
             SizedBox(height: 10),
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                 labelText: "Email",
                 labelStyle: TextStyle(
-                  color: Color.fromRGBO(117, 88, 7, 1),
+                  color: Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),
                 border: OutlineInputBorder(
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: () => Navigator.of(context).pop(),
             child: Text("Cancelar"),
             style: OutlinedButton.styleFrom(
-              foregroundColor: Color.fromRGBO(117, 88, 7, 1.0),
+              foregroundColor: Colors.grey,
               side: BorderSide(color: Colors.transparent),
             ),
           ),
@@ -73,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromRGBO(255, 203, 73, 1),
+        color: Color(0xFFF5F5F5),
         child: Stack(
           children: [
             Row(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         "Login",
                         style: TextStyle(
-                          color: Color.fromRGBO(117, 88, 7, 1),
+                          color: Color(0xFFD32F2F),
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(
                             labelText: "Email",
                             labelStyle: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                             border: OutlineInputBorder(
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(
                             labelText: "Senha",
                             labelStyle: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                             suffixIcon: IconButton(
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _showPassword
                                     ? Icons.visibility
                                     : Icons.visibility_off,
-                                color: Color.fromRGBO(117, 88, 7, 1),
+                                color: Color(0xFF757575),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             'Esqueceu sua senha?',
                             style: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             'Ainda não tem uma conta?',
                             style: TextStyle(
-                              color: Color.fromRGBO(117, 88, 7, 1),
+                              color: Color(0xFF757575),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
