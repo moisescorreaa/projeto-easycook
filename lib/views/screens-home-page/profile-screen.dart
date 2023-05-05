@@ -79,10 +79,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 100),
-          Padding(
+          Container(
+            width: double.infinity,
+            color: Color(0xFFFFCB49),
             padding: EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
+            child: Center(
               child: Text(
                 "Receitas publicadas",
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
