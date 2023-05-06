@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Image.asset('favicon_transparent_32x32.png'),
+                  child: Image.asset('assets/favicon_transparent_32x32.png'),
                   margin: EdgeInsets.only(top: 50),
                 ),
               ],

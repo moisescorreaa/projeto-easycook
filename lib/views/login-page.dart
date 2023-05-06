@@ -5,6 +5,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+
 class _LoginPageState extends State<LoginPage> {
   bool _showPassword = false;
 
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Image.asset('favicon_transparent_32x32.png'),
+                  child: Image.asset('assets/favicon_transparent_32x32.png'),
                   margin: EdgeInsets.only(top: 50),
                 ),
               ],

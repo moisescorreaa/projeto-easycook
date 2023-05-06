@@ -22,7 +22,7 @@ class User {
   User({required this.nome, required this.imagem});
 }
 
-User user = User(nome: "Moisés Rodrigo", imagem: 'assets/user.jpeg');
+User user = User(nome: "Moisés Rodrigo", imagem: 'assets/user.png');
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final List<Receita> receitas = [
@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 30),
           CircleAvatar(
             radius: 50,
-            backgroundImage: NetworkImage(user.imagem),
+            backgroundImage: AssetImage(user.imagem),
           ),
           SizedBox(height: 16),
           Text(

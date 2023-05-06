@@ -25,19 +25,19 @@ class _HomeScreenState extends State<HomeScreen> {
   // Lista de postagens para exibir no feed de receitas
   final List<Postagem> _postagens = [
     Postagem(
-      imagem: 'lasanha-italiana.jpg',
+      imagem: 'assets/lasanha-italiana.jpg',
       titulo: 'Lasanha Italiana',
       descricao:
           'Aprenda a fazer uma deliciosa lasanha italiana com massa fresca e molho de tomate caseiro.',
     ),
     Postagem(
-      imagem: 'bolo-chocolate.jpg',
+      imagem: 'assets/bolo-chocolate.jpg',
       titulo: 'Bolo de Chocolate',
       descricao:
           'Aprenda a fazer um bolo de chocolate fofinho com cobertura de brigadeiro.',
     ),
     Postagem(
-      imagem: 'pizza-margherita.jpg',
+      imagem: 'assets/pizza-margherita.jpg',
       titulo: 'Pizza Margherita',
       descricao:
           'Aprenda a fazer uma deliciosa pizza margherita com massa fina e crocante.',
@@ -106,9 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 300,
                         child: ClipRRect(
-                          child: Image.asset(
-                            _postagens[index].imagem,
-                            fit: BoxFit.cover,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(image: AssetImage(_postagens[index].imagem,))
+                            )
                           ),
                         ),
                       ),

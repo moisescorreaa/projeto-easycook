@@ -1,6 +1,6 @@
 {
-    "name": "task_list",
-    "short_name": "task_list",
+    "name": "easycook",
+    "short_name": "easycook",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
