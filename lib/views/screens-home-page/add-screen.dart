@@ -7,6 +7,24 @@ class AddScreen extends StatefulWidget {
   State<AddScreen> createState() => _AddScreenState();
 }
 
+class Receita {
+  final String imagemReceita;
+  final String tituloReceita;
+  final String descricao;
+  final List<String> ingredientes;
+  final int tempoDePreparo;
+  final String modoDePreparo;
+
+  Receita({
+    required this.imagemReceita,
+    required this.tituloReceita,
+    required this.descricao,
+    required this.ingredientes,
+    required this.tempoDePreparo,
+    required this.modoDePreparo,
+  });
+}
+
 class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
