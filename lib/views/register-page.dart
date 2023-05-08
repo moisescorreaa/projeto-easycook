@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
 
@@ -6,28 +8,79 @@ class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-final _formKey = GlobalKey<FormState>();
-final _usernameController = TextEditingController();
-final _emailController = TextEditingController();
-final _senhaController = TextEditingController();
-final _confirmarSenhaController = TextEditingController();
-
 class _RegisterPageState extends State<RegisterPage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  var _formKey = GlobalKey<FormState>();
+  late String username;
+  late String email;
+  late String password;
+
   bool _showPassword = false;
   bool _agreeToTerms = false;
   bool _showConfirmPassword = false;
+
+  String? _validarSenha(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, insira uma senha';
+    } else if (value.length < 6) {
+      return 'Por favor, insira uma senha mais forte';
+    }
+    return null;
+  }
+
+  String? _validarUsuario(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, insira um nome de usuário';
+    }
+    return null;
+  }
+
+  String? _validarEmail(String? value) {
+    if (!RegExp(r'^.+@[a-zA-Z]+.{1}[a-zA-Z]+(.{0,1}[a-zA-Z]+)$')
+            .hasMatch(value!) &&
+        value.isNotEmpty) {
+      return ('Por favor, insira um email válido.');
+    } else if (value == null || value.isEmpty) {
+      return 'Por favor, insira um email';
+    }
+  }
+
+  String? _conferirSenha(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Confirme sua senha, por favor';
+    } else if (value != password) {
+      return 'Senhas não conferem';
+    }
+    return null;
+  }
 
   void showAlert() {
     QuickAlert.show(
         context: context,
         title: 'Cheque seu email!',
-        confirmBtnText: 'Login',
+        confirmBtnText: 'OK',
         confirmBtnColor: Color.fromRGBO(18, 192, 106, 1),
         onConfirmBtnTap: () =>
             Navigator.of(context).popAndPushNamed('/login-page'),
         text:
             '\nEstamos animados para acompanhar você nessa jornada culinária!!!\n\nEnviamos uma mensagem para a sua caixa de entrada com um link de confirmação!',
         type: QuickAlertType.success);
+  }
+
+  registrar(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      try {
+        // salvar os dados no banco de dados...
+        await auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+
+        showAlert();
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   void popUpTerms(context) {
@@ -120,56 +173,44 @@ class _RegisterPageState extends State<RegisterPage> {
                       Container(
                         width: 300,
                         child: TextFormField(
-                            controller: _usernameController,
-                            decoration: InputDecoration(
-                              labelText: 'Nome do usuário',
-                              labelStyle: TextStyle(
-                                color: Color(0xFF757575),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                          decoration: InputDecoration(
+                            labelText: 'Nome do usuário',
+                            labelStyle: TextStyle(
+                              color: Color(0xFF757575),
+                              fontWeight: FontWeight.bold,
                             ),
-                            validator: (username) {
-                              if (username == null || username.isEmpty) {
-                                return 'Por favor, insira um nome de usuário';
-                              }
-                              return null;
-                            }),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          validator: _validarUsuario,
+                        ),
                       ),
                       SizedBox(height: 20),
                       Container(
                         width: 300,
                         child: TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType
-                                .emailAddress, // aparece o @ no teclado
-                            decoration: InputDecoration(
-                              labelText: "Email",
-                              labelStyle: TextStyle(
-                                color: Color(0xFF757575),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                          onSaved: (value) => email = value!,
+                          keyboardType: TextInputType
+                              .emailAddress, // aparece o @ no teclado
+                          decoration: InputDecoration(
+                            labelText: "Email",
+                            labelStyle: TextStyle(
+                              color: Color(0xFF757575),
+                              fontWeight: FontWeight.bold,
                             ),
-                            validator: (email) {
-                              if (!RegExp(r'^.+@[a-zA-Z]+.{1}[a-zA-Z]+(.{0,1}[a-zA-Z]+)$')
-                                      .hasMatch(email!) &&
-                                  email.isNotEmpty) {
-                                return ('Por favor, insira um email válido.');
-                              } else if (email == null || email.isEmpty) {
-                                return 'Por favor, insira um email';
-                              }
-                            }),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          validator: _validarEmail,
+                        ),
                       ),
                       SizedBox(height: 20),
                       Container(
                         width: 300,
                         child: TextFormField(
-                          controller: _senhaController,
+                          onSaved: (value) => password = value!,
                           obscureText: !_showPassword,
                           decoration: InputDecoration(
                             labelText: "Senha",
@@ -194,56 +235,39 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          validator: (senha) {
-                            if (senha == null || senha.isEmpty) {
-                              return 'Por favor, insira uma senha';
-                            } else if (senha.length < 6) {
-                              return 'Por favor, insira uma senha mais forte';
-                            }
-                            return null;
-                          },
+                          validator: _validarSenha,
                         ),
                       ),
                       SizedBox(height: 20),
                       Container(
                         width: 300,
                         child: TextFormField(
-                            controller: _confirmarSenhaController,
-                            obscureText: !_showConfirmPassword,
-                            decoration: InputDecoration(
-                              labelText: "Confirmar senha",
-                              labelStyle: TextStyle(
-                                color: Color(0xFF757575),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _showConfirmPassword
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Color(0xFF757575),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _showConfirmPassword =
-                                        !_showConfirmPassword;
-                                  });
-                                },
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                          obscureText: !_showConfirmPassword,
+                          decoration: InputDecoration(
+                            labelText: "Confirmar senha",
+                            labelStyle: TextStyle(
+                              color: Color(0xFF757575),
+                              fontWeight: FontWeight.bold,
                             ),
-                            validator: (confirmarSenha) {
-                              if (confirmarSenha == null ||
-                                  confirmarSenha.isEmpty) {
-                                return 'Confirme sua senha, por favor';
-                              } else if (confirmarSenha !=
-                                  _senhaController.text) {
-                                return 'Senhas não conferem';
-                              }
-                              return null;
-                            }),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _showConfirmPassword
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Color(0xFF757575),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _showConfirmPassword = !_showConfirmPassword;
+                                });
+                              },
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          validator: _conferirSenha,
+                        ),
                       ),
                       SizedBox(height: 20),
                       Row(
@@ -285,11 +309,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Container(
                         width: 300,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              showAlert();
-                            }
-                          },
+                          onPressed: () => registrar(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
                           ),
@@ -330,4 +350,14 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+}
+
+class Usuario {
+  final String? usernameUsuario;
+  final String? uuid;
+
+  Usuario({
+    required this.usernameUsuario,
+    required this.uuid,
+  });
 }
