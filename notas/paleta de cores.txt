@@ -7,3 +7,8 @@ Texto "Olá, seja bem-vindo": color: Color(0xFFD32F2F) (um vermelho escuro)
 Texto "Entre com sua conta para continuar": color: Colors.grey (um cinza)
 Botão de login: primary: Color(0xFFD32F2F) (um vermelho escuro)
 Botão de cadastro: side: BorderSide(color: Color(0xFF757575)) (uma borda cinza) e TextStyle(color: Color(0xFF757575)) (um cinza)
+
+
+
+
+

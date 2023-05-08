@@ -11,21 +11,61 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
-  XFile? imagemReceita;
-  String? tituloReceita;
+  XFile? imagem;
+  String? titulo;
   String? descricao;
   List<String> ingredientes = [];
-  int? tempoDePreparo;
-  String? modoDePreparo;
+  int? tempo;
+  String? modo;
 
   final TextEditingController _ingredientsController = TextEditingController();
+
+  void _criarReceita() {
+    if (imagem == null ||
+        titulo == null ||
+        descricao == null ||
+        ingredientes.isEmpty ||
+        tempo == null ||
+        modo == null) {
+      // Se algum campo obrigatório não foi preenchido, exibe um aviso e retorna.
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Campos obrigatórios não preenchidos'),
+            content: Text(
+                'Preencha todos os campos obrigatórios para criar a receita.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    Receita novaReceita = Receita(
+      tituloReceita: titulo,
+      descricaoReceita: descricao,
+      ingredientesReceita: List.from(ingredientes),
+      tempoDePreparo: tempo,
+      modoDePreparo: modo,
+      imagemReceita: imagem,
+    );
+
+    // Aqui você pode fazer o que quiser com o objeto novaReceita.
+    // Por exemplo, adicionar à lista de receitas ou salvá-lo em um banco de dados.
+  }
 
   selecionarImagem() async {
     final ImagePicker picker = ImagePicker();
 
     try {
       XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) setState(() => imagemReceita = file);
+      if (file != null) setState(() => imagem = file);
     } catch (e) {
       print(e);
     }
@@ -64,9 +104,8 @@ class _AddScreenState extends State<AddScreen> {
                 leading: Icon(Icons.insert_photo_outlined),
                 title: Text("Inserir imagem"),
                 onTap: selecionarImagem,
-                trailing: imagemReceita != null
-                    ? Image.file(File(imagemReceita!.path))
-                    : null,
+                trailing:
+                    imagem != null ? Image.file(File(imagem!.path)) : null,
               ),
               SizedBox(height: 20),
               // TextField para o título da receita
@@ -84,7 +123,7 @@ class _AddScreenState extends State<AddScreen> {
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 ),
                 onChanged: (value) {
-                  tituloReceita = value;
+                  titulo = value;
                 },
               ),
               SizedBox(height: 20),
@@ -108,7 +147,6 @@ class _AddScreenState extends State<AddScreen> {
                   descricao = value;
                 },
               ),
-
               SizedBox(height: 20),
               // TextField para a lista de ingredientes da receita
               Row(
@@ -182,7 +220,7 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
-                  tempoDePreparo = int.tryParse(value);
+                  tempo = int.tryParse(value);
                 },
               ),
               // TextField para o modo de preparo da receita
@@ -199,12 +237,36 @@ class _AddScreenState extends State<AddScreen> {
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                 ),
+                maxLines: null,
                 onChanged: (value) {
-                  modoDePreparo = value;
+                  modo = value;
                 },
               ),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                    onPressed: () => _criarReceita(), child: Text('Postar')),
+              )
             ],
           ),
         ));
   }
+}
+
+class Receita {
+  final XFile? imagemReceita;
+  final String? tituloReceita;
+  final String? descricaoReceita;
+  final List<String> ingredientesReceita;
+  final int? tempoDePreparo;
+  final String? modoDePreparo;
+
+  Receita({
+    required this.imagemReceita,
+    required this.tituloReceita,
+    required this.descricaoReceita,
+    required this.ingredientesReceita,
+    required this.tempoDePreparo,
+    required this.modoDePreparo,
+  });
 }
