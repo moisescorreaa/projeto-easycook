@@ -1,3 +1,4 @@
+import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -7,17 +8,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class Receita {
-  final String titulo;
-  final String descricao;
-  final String imagem;
+  final String tituloReceita;
+  final String descricaoReceita;
+  final String ingredientesReceita;
+  final String tempoDePreparo;
   final String modoDePreparo;
-  final String ingredientes;  
+  final String imagemReceita;
+ 
 
   Receita(
-      {required this.titulo,
-      required this.descricao,
-      required this.imagem,
-      required this.ingredientes,
+      {required this.tituloReceita,
+      required this.descricaoReceita,
+      required this.ingredientesReceita,
+      required this.tempoDePreparo,
+      required this.imagemReceita,
       required this.modoDePreparo});
 }
 
@@ -36,106 +40,42 @@ User user = User(nome: "Moisés Rodrigo", imagem: 'assets/user.png');
 class _ProfileScreenState extends State<ProfileScreen> {
   final List<Receita> _receitasPublicadas = [
     Receita(
-        titulo: "Mousse de Maracujá",
-        descricao:
+        tituloReceita: "Mousse de Maracujá",
+        descricaoReceita:
             "Aprenda a fazer uma sobremesa deliciosa, refrescante e fácil de preparar.",
-        imagem: 'assets/mousse-maracuja.jpg',
-        ingredientes: '1 lata de leite condensado\n1 lata de creme de leite\n1/2 xícara de suco de maracujá concentrado\n1 envelope de gelatina em pó sem sabor\n1/2 xícara de água quente\nPolpa de maracujá e folhas de hortelã para decorar',
-        modoDePreparo: '1. Em um recipiente, misture o leite condensado, o creme de leite e o suco de maracujá até obter uma mistura homogênea.\n2. Em outro recipiente, dissolva a gelatina em pó na água quente e misture bem.\n3. Adicione a gelatina dissolvida à mistura de leite condensado, creme de leite e suco de maracujá, e misture bem.\n4. Despeje a mistura em taças ou refratários individuais e leve à geladeira por, no mínimo, 2 horas.\n5. Retire da geladeira e decore com polpa de maracujá e folhas de hortelã antes de servir.'),
+        ingredientesReceita:
+            '1 lata de leite condensado\n1 lata de creme de leite\n1/2 xícara de suco de maracujá concentrado\n1 envelope de gelatina em pó sem sabor\n1/2 xícara de água quente\nPolpa de maracujá e folhas de hortelã para decorar',
+        tempoDePreparo: '20 a 30 minutos',
+        imagemReceita: 'assets/mousse-maracuja.jpg',
+        modoDePreparo:
+            '1. Em um recipiente, misture o leite condensado, o creme de leite e o suco de maracujá até obter uma mistura homogênea.\n2. Em outro recipiente, dissolva a gelatina em pó na água quente e misture bem.\n3. Adicione a gelatina dissolvida à mistura de leite condensado, creme de leite e suco de maracujá, e misture bem.\n4. Despeje a mistura em taças ou refratários individuais e leve à geladeira por, no mínimo, 2 horas.\n5. Retire da geladeira e decore com polpa de maracujá e folhas de hortelã antes de servir.'),
     Receita(
-        titulo: "Mousse de Maracujá",
-        descricao:
-            "Aprenda a fazer uma sobremesa deliciosa, refrescante e fácil de preparar.",
-        imagem: 'assets/mousse-maracuja.jpg',
-        ingredientes: 'b',
-        modoDePreparo: 'b'),
-    Receita(
-        titulo: "Mousse de Maracujá",
-        descricao:
-            "Aprenda a fazer uma sobremesa deliciosa, refrescante e fácil de preparar.",
-        imagem: 'assets/mousse-maracuja.jpg',
-        ingredientes: 'b',
-        modoDePreparo: 'c'),
-    Receita(
-        titulo: "Mousse de Maracujá",
-        descricao:
-            "Aprenda a fazer uma sobremesa deliciosa, refrescante e fácil de preparar.",
-        imagem: 'assets/mousse-maracuja.jpg',
-        ingredientes: 'b',
-        modoDePreparo: 'd'),
-    Receita(
-        titulo: "Escondidinho de Camarão",
-        descricao:
+        tituloReceita: "Escondidinho de Camarão",
+        descricaoReceita:
             "Aprenda a fazer um prato delicioso e fácil para uma reunião entre amigos ou família.",
-        imagem: 'assets/escondidinho-camarao.jpg',
-        ingredientes: 'b',
+        ingredientesReceita: 'b',
+        tempoDePreparo: '40 a 60 minutos',
+        imagemReceita: 'assets/escondidinho-camarao.jpg',
         modoDePreparo: 'e'),
     Receita(
-        titulo: "Escondidinho de Camarão",
-        descricao:
-            "Aprenda a fazer um prato delicioso e fácil para uma reunião entre amigos ou família.",
-        imagem: 'assets/escondidinho-camarao.jpg',
-        ingredientes: 'b',
-        modoDePreparo: 'f'),
-    Receita(
-        titulo: "Escondidinho de Camarão",
-        descricao:
-            "Aprenda a fazer um prato delicioso e fácil para uma reunião entre amigos ou família.",
-        imagem: 'assets/escondidinho-camarao.jpg',
-        ingredientes: 'b',
-        modoDePreparo: 'g'),
-    Receita(
-        titulo: "Smoothie",
-        descricao:
+        tituloReceita: "Smoothie",
+        descricaoReceita:
             "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
+        tempoDePreparo: '5 a 10 minutos',
+        imagemReceita: 'assets/smoothie.png',
+        ingredientesReceita: 'b',
         modoDePreparo: 'h'),
-    Receita(
-        titulo: "Smoothie",
-        descricao:
-            "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
-        modoDePreparo: 'i')
   ];
 
   final List<Receita> _receitasFavoritadas = [
     Receita(
-        titulo: "Smoothie",
-        descricao:
+        tituloReceita: "Smoothie",
+        descricaoReceita:
             "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
+        tempoDePreparo: '5 a 10 minutos',
+        imagemReceita: 'assets/smoothie.png',
+        ingredientesReceita: 'b',
         modoDePreparo: 'j'),
-    Receita(
-        titulo: "Smoothie",
-        descricao:
-            "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
-        modoDePreparo: 'k'),
-    Receita(
-        titulo: "Smoothie",
-        descricao:
-            "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
-        modoDePreparo: 'l'),
-    Receita(
-        titulo: "Smoothie",
-        descricao:
-            "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
-        modoDePreparo: 'm'),
-    Receita(
-        titulo: "Smoothie",
-        descricao:
-            "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
-        imagem: 'assets/smoothie.png',
-        ingredientes: 'b',
-        modoDePreparo: 'n')
   ];
 
   @override
@@ -242,27 +182,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title:
-                                        Text(_receitasPublicadas[index].titulo),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Image.asset(
-                                            _receitasPublicadas[index].imagem),
-                                            SizedBox(height: 20),
-                                        Text(_receitasPublicadas[index]
-                                            .descricao),
-                                            SizedBox(height: 20),
-                                        Text(_receitasPublicadas[index]
-                                            .modoDePreparo),
-                                      ],
-                                    ),
-                                  );
-                                },
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RecipeScreen(
+                                        receita: _receitasPublicadas[index])),
                               );
                             },
                             child: Container(
@@ -270,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   image: AssetImage(
-                                      _receitasPublicadas[index].imagem),
+                                      _receitasPublicadas[index].imagemReceita),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -287,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Text(
-                                      _receitasPublicadas[index].titulo,
+                                      _receitasPublicadas[index].tituloReceita,
                                       style: TextStyle(color: Colors.white),
                                       textAlign: TextAlign.center,
                                     ),
@@ -317,7 +241,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: AssetImage(
-                                  _receitasFavoritadas[index].imagem),
+                                  _receitasFavoritadas[index].imagemReceita),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -334,7 +258,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Text(
-                                  _receitasFavoritadas[index].titulo,
+                                  _receitasFavoritadas[index].tituloReceita,
                                   style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
