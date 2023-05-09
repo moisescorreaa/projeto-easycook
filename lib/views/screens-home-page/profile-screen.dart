@@ -1,5 +1,7 @@
-import 'package:easycook_main/views/screens-home-page/edit-profile-screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easycook_main/model/usuarios.dart';
 import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -25,19 +27,42 @@ class Receita {
       required this.modoDePreparo});
 }
 
-class User {
-  late final String nome;
-  late final String imagem;
-
-  User({required this.nome, required this.imagem});
-}
-
-bool mostrarReceitasPublicadas = true;
-bool mostrarReceitasFavoritadas = false;
-
-User user = User(nome: "Moisés Rodrigo", imagem: 'assets/user.png');
-
 class _ProfileScreenState extends State<ProfileScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  bool mostrarReceitasPublicadas = true;
+  bool mostrarReceitasFavoritadas = false;
+
+  String username = "";
+
+  final nomeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    buscarDadosUsuario();
+  }
+
+  void buscarDadosUsuario() {
+    db
+        .collection("usuarios")
+        .where("uid", isEqualTo: auth.currentUser!.uid)
+        .get()
+        .then((querySnapshot) {
+      if (querySnapshot.size > 0) {
+        String username = querySnapshot.docs[0].data()["username"];
+        setState(() {
+          this.username = username;
+        });
+      } else {
+        setState(() {
+          this.username = "Erro";
+        });
+      }
+    });
+  }
+
   final List<Receita> _receitasPublicadas = [
     Receita(
         tituloReceita: "Mousse de Maracujá",
@@ -102,24 +127,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             SizedBox(height: 30),
             CircleAvatar(
+              backgroundColor: Colors.transparent,
               radius: 50,
-              backgroundImage: AssetImage(user.imagem),
+              backgroundImage: AssetImage('user.png'),
             ),
             SizedBox(height: 16),
             Text(
-              user.nome,
+              username,
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditProfileScreen(user: user),
-                  ),
-                );
-              },
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFD32F2F),
               ),
