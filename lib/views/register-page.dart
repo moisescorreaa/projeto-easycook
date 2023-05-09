@@ -11,6 +11,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  final confirmaSenhaController = TextEditingController();
+
   var _formKey = GlobalKey<FormState>();
   late String username;
   late String email;
@@ -25,6 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
       return 'Por favor, insira uma senha';
     } else if (value.length < 6) {
       return 'Por favor, insira uma senha mais forte';
+    } else if (value != confirmaSenhaController.text) {
+      return 'Senhas não conferem';
     }
     return null;
   }
@@ -37,35 +41,38 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   String? _validarEmail(String? value) {
-    if (!RegExp(r'^.+@[a-zA-Z]+.{1}[a-zA-Z]+(.{0,1}[a-zA-Z]+)$')
-            .hasMatch(value!) &&
-        value.isNotEmpty) {
-      return ('Por favor, insira um email válido.');
-    } else if (value == null || value.isEmpty) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+    if (value!.isEmpty) {
       return 'Por favor, insira um email';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Por favor, insira um email válido.';
+    } else {
+      return null;
     }
   }
 
-  String? _conferirSenha(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Confirme sua senha, por favor';
-    } else if (value != password) {
-      return 'Senhas não conferem';
+  void showAlert(value, String? respostaErro) {
+    if (value == true) {
+      QuickAlert.show(
+          context: context,
+          title: 'Cheque seu email!',
+          confirmBtnText: 'OK',
+          confirmBtnColor: Color.fromRGBO(18, 192, 106, 1),
+          onConfirmBtnTap: () =>
+              Navigator.of(context).popAndPushNamed('/login-page'),
+          text:
+              '\nEstamos animados para acompanhar você nessa jornada culinária!!!\n\nEnviamos uma mensagem para a sua caixa de entrada com um link de confirmação!',
+          type: QuickAlertType.success);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(respostaErro!),
+        ),
+      );
     }
-    return null;
-  }
-
-  void showAlert() {
-    QuickAlert.show(
-        context: context,
-        title: 'Cheque seu email!',
-        confirmBtnText: 'OK',
-        confirmBtnColor: Color.fromRGBO(18, 192, 106, 1),
-        onConfirmBtnTap: () =>
-            Navigator.of(context).popAndPushNamed('/login-page'),
-        text:
-            '\nEstamos animados para acompanhar você nessa jornada culinária!!!\n\nEnviamos uma mensagem para a sua caixa de entrada com um link de confirmação!',
-        type: QuickAlertType.success);
   }
 
   registrar(BuildContext context) async {
@@ -76,9 +83,17 @@ class _RegisterPageState extends State<RegisterPage> {
         await auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
-        showAlert();
+        showAlert(true, '');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          showAlert(false, 'A senha é muito fraca.');
+        } else if (e.code == 'email-already-in-use') {
+          showAlert(false, 'O endereço de e-mail já está em uso.');
+        } else {
+          showAlert(false, 'Ocorreu um erro ao cadastrar o usuário');
+        }
       } catch (e) {
-        print(e);
+        showAlert(false, 'Ocorreu um erro desconhecido');
       }
     }
   }
@@ -242,6 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Container(
                         width: 300,
                         child: TextFormField(
+                          controller: confirmaSenhaController,
                           obscureText: !_showConfirmPassword,
                           decoration: InputDecoration(
                             labelText: "Confirmar senha",
@@ -266,7 +282,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          validator: _conferirSenha,
                         ),
                       ),
                       SizedBox(height: 20),
