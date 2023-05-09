@@ -1,8 +1,9 @@
+import 'package:easycook_main/views/screens-home-page/edit-profile-screen.dart';
 import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({Key? key}) : super(key: key);
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -14,7 +15,6 @@ class Receita {
   final String tempoDePreparo;
   final String modoDePreparo;
   final String imagemReceita;
- 
 
   Receita(
       {required this.tituloReceita,
@@ -26,7 +26,7 @@ class Receita {
 }
 
 class User {
-  final String nome;
+  late final String nome;
   final String imagem;
 
   User({required this.nome, required this.imagem});
@@ -110,6 +110,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
               user.nome,
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  '/edit_profile',
+                  arguments: {
+                    'nome': user.nome,
+                    'imagem': user.imagem,
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFD32F2F),
+              ),
+              child: Text(
+                'Editar perfil',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
             SizedBox(height: 150),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -182,12 +203,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RecipeScreen(
-                                        receita: _receitasPublicadas[index])),
-                              );
+                             Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => EditProfileScreen(user: user),
+  ),
+);
                             },
                             child: Container(
                               decoration: BoxDecoration(
