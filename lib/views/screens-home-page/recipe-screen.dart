@@ -11,8 +11,6 @@ class RecipeScreen extends StatefulWidget {
 }
 
 class _RecipeScreenState extends State<RecipeScreen> {
-  bool _isEditing = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,9 +35,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
           IconButton(
             icon: Icon(Icons.edit, color: Colors.red),
             onPressed: () {
-              setState(() {
-                _isEditing = true;
-              });
+              setState(() {});
             },
           ),
         ],
