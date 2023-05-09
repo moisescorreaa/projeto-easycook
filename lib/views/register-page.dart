@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -10,13 +12,16 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   final confirmaSenhaController = TextEditingController();
+  final usuarioController = TextEditingController();
 
   var _formKey = GlobalKey<FormState>();
   late String username;
   late String email;
   late String password;
+  late String? mensagemTermos;
 
   bool _showPassword = false;
   bool _agreeToTerms = false;
@@ -29,6 +34,13 @@ class _RegisterPageState extends State<RegisterPage> {
       return 'Por favor, insira uma senha mais forte';
     } else if (value != confirmaSenhaController.text) {
       return 'Senhas não conferem';
+    }
+    return null;
+  }
+
+  String? _validarConfirmarSenha(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, insira confirme sua senha';
     }
     return null;
   }
@@ -75,26 +87,53 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  registrar(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-        // salvar os dados no banco de dados...
-        await auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+  void showAlertTerms(String? mensagemTermos) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(mensagemTermos!),
+      ),
+    );
+  }
 
-        showAlert(true, '');
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          showAlert(false, 'A senha é muito fraca.');
-        } else if (e.code == 'email-already-in-use') {
-          showAlert(false, 'O endereço de e-mail já está em uso.');
-        } else {
-          showAlert(false, 'Ocorreu um erro ao cadastrar o usuário');
+  void salvarDadosUsuario() {
+    String username = usuarioController.text;
+
+    Usuarios novoUsuario = Usuarios(
+      usernameUsuario: username,
+      id: auth.currentUser!.uid,
+    );
+
+    db
+        .collection('usuarios')
+        .add({'username': novoUsuario.usernameUsuario, 'uid': novoUsuario.id});
+  }
+
+  registrar(BuildContext context) async {
+    if (_agreeToTerms == true) {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        try {
+          // salvar os dados no banco de dados...
+          await auth.createUserWithEmailAndPassword(
+              email: email, password: password);
+
+          showAlert(true, null);
+          salvarDadosUsuario();
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            showAlert(false, 'A senha é muito fraca.');
+          } else if (e.code == 'email-already-in-use') {
+            showAlert(false, 'O endereço de e-mail já está em uso.');
+          } else {
+            showAlert(false, 'Ocorreu um erro ao cadastrar o usuário');
+          }
+        } catch (e) {
+          showAlert(false, 'Ocorreu um erro desconhecido');
         }
-      } catch (e) {
-        showAlert(false, 'Ocorreu um erro desconhecido');
       }
+    } else {
+      showAlertTerms('Aceite os termos de uso para cadastrar-se.');
     }
   }
 
@@ -199,6 +238,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
                           validator: _validarUsuario,
+                          controller: usuarioController,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -259,6 +299,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextFormField(
                           controller: confirmaSenhaController,
                           obscureText: !_showConfirmPassword,
+                          validator: _validarConfirmarSenha,
                           decoration: InputDecoration(
                             labelText: "Confirmar senha",
                             labelStyle: TextStyle(
@@ -367,12 +408,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
-class Usuario {
+class Usuarios {
   final String? usernameUsuario;
-  final String? uuid;
+  final String? id;
+  XFile? fotoPerfil;
 
-  Usuario({
+  Usuarios({
     required this.usernameUsuario,
-    required this.uuid,
+    required this.id,
+    this.fotoPerfil,
   });
 }
