@@ -1,9 +1,11 @@
 import 'package:easycook_main/views/screens-home-page/profile-screen.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final User user;
-  const EditProfileScreen({Key? key, required this.user}) : super(key: key);
+
+  EditProfileScreen({required this.user});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -11,11 +13,29 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late User _user;
+  final _nameController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _user = widget.user;
+    _nameController.text = _user.nome;
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _user.imagem = pickedImage.path;
+      });
+    }
   }
 
   @override
@@ -35,6 +55,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             color: Colors.red,
           ),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.red),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -43,7 +67,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                // Implementar ação de alterar foto
+                _pickImage();
               },
               child: CircleAvatar(
                 radius: 50,
@@ -51,15 +75,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             SizedBox(height: 16),
-            Text(
-              _user.nome,
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32),
               child: TextFormField(
-                initialValue: _user.nome,
+                controller: _nameController,
                 decoration: InputDecoration(
                   labelText: 'Nome',
                   border: OutlineInputBorder(),
@@ -72,10 +91,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Implementar ação de salvar alterações
+                Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFFD32F2F),
+                backgroundColor: Color(0xFFD32F2F),
               ),
               child: Text(
                 'Salvar alterações',

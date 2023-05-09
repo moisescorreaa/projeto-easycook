@@ -27,7 +27,7 @@ class Receita {
 
 class User {
   late final String nome;
-  final String imagem;
+  late final String imagem;
 
   User({required this.nome, required this.imagem});
 }
@@ -110,19 +110,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               user.nome,
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(
-                  '/edit_profile',
-                  arguments: {
-                    'nome': user.nome,
-                    'imagem': user.imagem,
-                  },
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(user: user),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFFD32F2F),
+                backgroundColor: Color(0xFFD32F2F),
               ),
               child: Text(
                 'Editar perfil',
@@ -131,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 150),
+            SizedBox(height: 50),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -203,12 +202,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
-                             Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => EditProfileScreen(user: user),
-  ),
-);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RecipeScreen(
+                                        receita: _receitasPublicadas[index])),
+                              );
                             },
                             child: Container(
                               decoration: BoxDecoration(
