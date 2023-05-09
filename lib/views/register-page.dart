@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easycook_main/model/usuarios.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -406,16 +407,4 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-}
-
-class Usuarios {
-  final String? usernameUsuario;
-  final String? id;
-  XFile? fotoPerfil;
-
-  Usuarios({
-    required this.usernameUsuario,
-    required this.id,
-    this.fotoPerfil,
-  });
 }

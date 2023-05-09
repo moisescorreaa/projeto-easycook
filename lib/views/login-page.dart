@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -5,13 +6,66 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-
 class _LoginPageState extends State<LoginPage> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   bool _showPassword = false;
 
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  var _formKey = GlobalKey<FormState>();
+
+  late String email;
+  late String password;
+
+  void showAlert(String? respostaErro) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(respostaErro!),
+      ),
+    );
+  }
+
+  logar(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      try {
+        // salvar os dados no banco de dados...
+        await auth.signInWithEmailAndPassword(email: email, password: password);
+
+        Navigator.of(context).pushNamed('/home-page');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'wrong-password' || e.code == 'invalid-email') {
+          showAlert('Email ou senha inválidos.');
+        } else if (e.code == 'user-disabled') {
+          showAlert('Esse usuário corresponde a um email desativado.');
+        } else if (e.code == 'user-not-found') {
+          showAlert('Usuário não foi encontrado');
+        }
+      } catch (e) {
+        showAlert('Ocorreu um erro desconhecido');
+      }
+    }
+  }
+
+  String? _validarSenha(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor, insira a senha';
+    }
+    return null;
+  }
+
+  String? _validarEmail(String? value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+    if (value!.isEmpty) {
+      return 'Por favor, insira um email';
+    } else if (!regExp.hasMatch(value)) {
+      return 'Por favor, insira um email válido.';
+    } else {
+      return null;
+    }
+  }
 
   void showForgotPasswordDialog() {
     showDialog(
@@ -105,16 +159,8 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         width: 300,
                         child: TextFormField(
-                          controller: _emailController,
-                          validator: (email) {
-                            if (!RegExp(r'^.+@[a-zA-Z]+.{1}[a-zA-Z]+(.{0,1}[a-zA-Z]+)$')
-                                    .hasMatch(email!) &&
-                                email.isNotEmpty) {
-                              return ('Por favor, insira um email válido.');
-                            } else if (email == null || email.isEmpty) {
-                              return 'Por favor, insira um email';
-                            }
-                          },
+                          validator: _validarEmail,
+                          onSaved: (value) => email = value!,
                           decoration: InputDecoration(
                             labelText: "Email",
                             labelStyle: TextStyle(
@@ -131,13 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         width: 300,
                         child: TextFormField(
-                          controller: _passwordController,
-                          validator: (password) {
-                            if (password == null || password.isEmpty) {
-                              return 'Por favor, insira a senha';
-                            }
-                            return null;
-                          },
+                          onSaved: (value) => password = value!,
+                          validator: _validarSenha,
                           obscureText: !_showPassword,
                           decoration: InputDecoration(
                             labelText: "Senha",
@@ -191,11 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         width: 300,
                         child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.of(context).pushNamed('/home-page');
-                            }
-                          },
+                          onPressed: () => logar(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
                           ),
