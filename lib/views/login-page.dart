@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
 
   late String email;
   late String password;
+  final emailPerdido = TextEditingController();
 
   void showAlert(String? respostaErro) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -23,6 +24,23 @@ class _LoginPageState extends State<LoginPage> {
         content: Text(respostaErro!),
       ),
     );
+  }
+
+  void enviarEmailRedefinicaoSenha(BuildContext context, String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('E-mail de redefinição enviado com sucesso')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Ocorreu um erro ao enviar o e-mail de redefinição')),
+      );
+    }
   }
 
   logar(BuildContext context) async {
@@ -90,6 +108,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 10),
             TextFormField(
+              controller: emailPerdido,
               decoration: InputDecoration(
                 labelText: "Email",
                 labelStyle: TextStyle(
@@ -113,7 +132,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () =>
+                enviarEmailRedefinicaoSenha(context, emailPerdido.text),
             child: Text("Enviar"),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
