@@ -13,7 +13,6 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
-  FirebaseFirestore db = FirebaseFirestore.instance;
 
   final confirmaSenhaController = TextEditingController();
   final usuarioController = TextEditingController();
@@ -104,10 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
       usernameUsuario: username,
       id: auth.currentUser!.uid,
     );
-
-    db
-        .collection('usuarios')
-        .add({'username': novoUsuario.usernameUsuario, 'uid': novoUsuario.id});
+    auth.currentUser?.updateDisplayName(novoUsuario.usernameUsuario);
   }
 
   registrar(BuildContext context) async {
@@ -115,7 +111,6 @@ class _RegisterPageState extends State<RegisterPage> {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         try {
-          // salvar os dados no banco de dados...
           await auth.createUserWithEmailAndPassword(
               email: email, password: password);
 

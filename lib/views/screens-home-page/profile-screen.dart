@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool mostrarReceitasPublicadas = true;
   bool mostrarReceitasFavoritadas = false;
 
-  String username = "";
+  String? username = "";
 
   final nomeController = TextEditingController();
 
@@ -45,23 +45,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void buscarDadosUsuario() {
-    db
-        .collection("usuarios")
-        .where("uid", isEqualTo: auth.currentUser!.uid)
-        .get()
-        .then((querySnapshot) {
-      if (querySnapshot.size > 0) {
-        String username = querySnapshot.docs[0].data()["username"];
-        setState(() {
-          this.username = username;
-        });
-      } else {
-        setState(() {
-          this.username = "Erro";
-        });
-      }
-    });
+    username = auth.currentUser?.displayName;
   }
+
+  // void alterarDadosUsuario() {
+  //   db
+  //       .collection("usuarios").doc(auth.currentUser!.displayName)
+  //       ..update({'username' :  });
+
+  // }
 
   final List<Receita> _receitasPublicadas = [
     Receita(
@@ -78,18 +70,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
         tituloReceita: "Escondidinho de Camarão",
         descricaoReceita:
             "Aprenda a fazer um prato delicioso e fácil para uma reunião entre amigos ou família.",
-        ingredientesReceita: '500g de camarão limpo e descascado\n1kg de mandioca\n1 cebola média picada\n3 dentes de alho picados\n2 colheres de sopa de manteiga\n1 xícara de leite\n1/2 xícara de creme de leite\n1/2 xícara de queijo parmesão ralado\n1/2 xícara de requeijão cremoso\nSal e pimenta a gosto\nCheiro verde picado para finalizar',
+        ingredientesReceita:
+            '500g de camarão limpo e descascado\n1kg de mandioca\n1 cebola média picada\n3 dentes de alho picados\n2 colheres de sopa de manteiga\n1 xícara de leite\n1/2 xícara de creme de leite\n1/2 xícara de queijo parmesão ralado\n1/2 xícara de requeijão cremoso\nSal e pimenta a gosto\nCheiro verde picado para finalizar',
         tempoDePreparo: '40 a 60 minutos',
         imagemReceita: 'assets/escondidinho-camarao.jpg',
-        modoDePreparo: '1. Descasque e corte a mandioca em pedaços médios. Coloque em uma panela com água e cozinhe até que fique macia.\n2. Enquanto a mandioca cozinha, em uma frigideira grande, refogue a cebola e o alho em uma colher de sopa de manteiga até que fiquem macios.\n3. Adicione o camarão e refogue até que fiquem rosados. Tempere com sal e pimenta a gosto. Reserve.\n4. Quando a mandioca estiver cozida, escorra a água e amasse até obter um purê. Adicione a manteiga restante, o leite, o creme de leite, o queijo parmesão e misture bem.\n5. Em um refratário, coloque metade do purê de mandioca, o camarão refogado e o requeijão cremoso. Cubra com o restante do purê.\n6. Leve ao forno pré-aquecido a 200°C por cerca de 20 minutos, ou até que fique dourado.\n7. Retire do forno e finalize com cheiro verde picado por cima.'),
+        modoDePreparo:
+            '1. Descasque e corte a mandioca em pedaços médios. Coloque em uma panela com água e cozinhe até que fique macia.\n2. Enquanto a mandioca cozinha, em uma frigideira grande, refogue a cebola e o alho em uma colher de sopa de manteiga até que fiquem macios.\n3. Adicione o camarão e refogue até que fiquem rosados. Tempere com sal e pimenta a gosto. Reserve.\n4. Quando a mandioca estiver cozida, escorra a água e amasse até obter um purê. Adicione a manteiga restante, o leite, o creme de leite, o queijo parmesão e misture bem.\n5. Em um refratário, coloque metade do purê de mandioca, o camarão refogado e o requeijão cremoso. Cubra com o restante do purê.\n6. Leve ao forno pré-aquecido a 200°C por cerca de 20 minutos, ou até que fique dourado.\n7. Retire do forno e finalize com cheiro verde picado por cima.'),
     Receita(
         tituloReceita: "Paçoca",
         descricaoReceita:
             "As festas juninas já estão chegando! Está na hora de tirar as bandeirinhas do armário e preparar as receitas típicas, que todo mundo gosta. Que tal começar pela paçoca? Esse docinho tradicional costuma agradar desde as crianças até os adultos e é super fácil de fazer. Confira:",
         tempoDePreparo: '30 a 40 minutos',
         imagemReceita: 'assets/pacoca.jpg',
-        ingredientesReceita: '1/2 kg de amendoim torrado (sem casca e sem pele)\n1 xícara (chá) de farinha de milho\n2 xícaras (chá) de açúcar\n1 colher (café) de sal',
-        modoDePreparo: '1. Torre o amendoim por aproximadamente 20 minutos.\n2. Bata no liquidificador até que fique todo triturado.\n3. Coloque em uma vasilha grande para que possa misturar todos os ingredientes bem.\n4. Bata a bolacha também no liquidificador, misture ao amendoim.\n5. Coloque o leite condensado aos poucos, mexendo bem, até que fique uma massa bem dura.\n6. Espalhe em uma forma média untada com margarina, apertando bem com as mãos.\n7. Deixe descansar por 20 minutos e corte os quadradinhos.'),
+        ingredientesReceita:
+            '1/2 kg de amendoim torrado (sem casca e sem pele)\n1 xícara (chá) de farinha de milho\n2 xícaras (chá) de açúcar\n1 colher (café) de sal',
+        modoDePreparo:
+            '1. Torre o amendoim por aproximadamente 20 minutos.\n2. Bata no liquidificador até que fique todo triturado.\n3. Coloque em uma vasilha grande para que possa misturar todos os ingredientes bem.\n4. Bata a bolacha também no liquidificador, misture ao amendoim.\n5. Coloque o leite condensado aos poucos, mexendo bem, até que fique uma massa bem dura.\n6. Espalhe em uma forma média untada com margarina, apertando bem com as mãos.\n7. Deixe descansar por 20 minutos e corte os quadradinhos.'),
   ];
 
   final List<Receita> _receitasFavoritadas = [
@@ -99,8 +95,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             "Aprenda a fazer smoothie, uma bebida cremosa, saudável e refrescante",
         tempoDePreparo: '5 a 10 minutos',
         imagemReceita: 'assets/smoothie.png',
-        ingredientesReceita: '1 xícara de morangos frescos (lavados e sem o cabinho)\n1 banana média madura\n1/2 xícara de leite\n1/2 xícara de iogurte natural\n1 colher de sopa de mel (opcional)\nGelo a gosto',
-        modoDePreparo: '1. Lave bem os morangos e retire os cabinhos. Corte-os em pedaços pequenos e coloque em um liquidificador.\n2. Adicione a banana cortada em rodelas, o leite, o iogurte e o mel (se desejar um smoothie mais doce).\n3. Adicione algumas pedras de gelo e bata todos os ingredientes no liquidificador até obter uma mistura homogênea e cremosa.\n4. Se preferir, adicione mais gelo e bata novamente até atingir a consistência desejada.\n5. Sirva em um copo e adicione uma fatia de morango ou algumas folhas de hortelã para decorar.'),
+        ingredientesReceita:
+            '1 xícara de morangos frescos (lavados e sem o cabinho)\n1 banana média madura\n1/2 xícara de leite\n1/2 xícara de iogurte natural\n1 colher de sopa de mel (opcional)\nGelo a gosto',
+        modoDePreparo:
+            '1. Lave bem os morangos e retire os cabinhos. Corte-os em pedaços pequenos e coloque em um liquidificador.\n2. Adicione a banana cortada em rodelas, o leite, o iogurte e o mel (se desejar um smoothie mais doce).\n3. Adicione algumas pedras de gelo e bata todos os ingredientes no liquidificador até obter uma mistura homogênea e cremosa.\n4. Se preferir, adicione mais gelo e bata novamente até atingir a consistência desejada.\n5. Sirva em um copo e adicione uma fatia de morango ou algumas folhas de hortelã para decorar.'),
   ];
 
   @override
@@ -129,11 +127,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CircleAvatar(
               backgroundColor: Colors.transparent,
               radius: 50,
-              backgroundImage: AssetImage('user.png'),
+              backgroundImage: AssetImage('assets/user.png'),
             ),
             SizedBox(height: 16),
             Text(
-              username,
+              username!,
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),

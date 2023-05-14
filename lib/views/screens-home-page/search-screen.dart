@@ -26,19 +26,19 @@ class Postagem {
 class _SearchScreenState extends State<SearchScreen> {
   final List<Postagem> _postagens = [
     Postagem(
-      imagem: 'lasanha-italiana.jpg',
+      imagem: 'assets/lasanha-italiana.jpg',
       titulo: 'Lasanha Italiana',
       descricao:
           'Aprenda a fazer uma deliciosa lasanha italiana com massa fresca e molho de tomate caseiro.',
     ),
     Postagem(
-      imagem: 'bolo-chocolate.jpg',
+      imagem: 'assets/bolo-chocolate.jpg',
       titulo: 'Bolo de Chocolate',
       descricao:
           'Aprenda a fazer um bolo de chocolate fofinho com cobertura de brigadeiro.',
     ),
     Postagem(
-      imagem: 'pizza-margherita.jpg',
+      imagem: 'assets/pizza-margherita.jpg',
       titulo: 'Pizza Margherita',
       descricao:
           'Aprenda a fazer uma deliciosa pizza margherita com massa fina e crocante.',
@@ -149,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             flex: 1,
                             child: Padding(
-                              padding: EdgeInsets.all(16),
+                              padding: EdgeInsets.all(10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -161,7 +161,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 8),
                                   Text(
                                     _postagens[index].descricao,
                                     overflow: TextOverflow.ellipsis,
@@ -183,20 +182,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          _postagens[index].curtida
-                                              ? Icons.favorite
-                                              : Icons.favorite_border,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _postagens[index].curtida =
-                                                !_postagens[index].curtida;
-                                          });
-                                        },
-                                      ),
                                       Text(
                                         '${_postagens[index].numeroCurtidas} ${_postagens[index].numeroCurtidas == 1 ? "curtida" : "curtidas"}',
                                         style: TextStyle(
@@ -206,16 +191,6 @@ class _SearchScreenState extends State<SearchScreen> {
                                         ),
                                       ),
                                     ],
-                                  ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'Ver receita',
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black),
-                                    ),
                                   ),
                                 ],
                               ),
