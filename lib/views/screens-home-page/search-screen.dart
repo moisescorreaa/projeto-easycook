@@ -165,7 +165,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     _postagens[index].descricao,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 11,
                                     ),
                                   ),
                                 ],

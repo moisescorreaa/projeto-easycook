@@ -100,14 +100,21 @@ class _AddScreenState extends State<AddScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ListTile(
-                leading: Icon(Icons.insert_photo_outlined),
-                title: Text("Inserir imagem"),
-                onTap: selecionarImagem,
-                trailing:
-                    imagem != null ? Image.file(File(imagem!.path)) : null,
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: ListTile(
+                  leading: Icon(Icons.insert_photo_outlined),
+                  title: Text("Inserir imagem"),
+                  onTap: selecionarImagem,
+                  trailing:
+                      imagem != null ? Image.file(File(imagem!.path)) : null,
+                ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               // TextField para o título da receita
               TextField(
                 decoration: InputDecoration(
@@ -118,15 +125,20 @@ class _AddScreenState extends State<AddScreen> {
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5),
+                  fillColor: Colors.grey[200],
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  prefixIcon: Icon(Icons.title),
                 ),
+                maxLines: null,
+                textAlignVertical: TextAlignVertical.top,
                 onChanged: (value) {
                   titulo = value;
                 },
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+
+              SizedBox(height: 10),
               // TextField para a descrição da receita
               TextField(
                 decoration: InputDecoration(
@@ -137,17 +149,19 @@ class _AddScreenState extends State<AddScreen> {
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5),
+                  fillColor: Colors.grey[200],
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  prefixIcon: Icon(Icons.description),
                 ),
                 maxLines: null,
                 textAlignVertical: TextAlignVertical.top,
                 onChanged: (value) {
                   descricao = value;
                 },
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               // TextField para a lista de ingredientes da receita
               Row(
                 children: [
@@ -162,15 +176,17 @@ class _AddScreenState extends State<AddScreen> {
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: Color(0xFFF5F5F5),
+                        fillColor: Colors.grey[200],
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 12.0),
+                        prefixIcon: Icon(Icons.add_shopping_cart),
                       ),
                     ),
                   ),
                   IconButton(
                     icon: Icon(Icons.add),
                     onPressed: _addIngredient,
+                    color: Color.fromARGB(255, 100, 100, 100),
                   ),
                 ],
               ),
@@ -197,14 +213,15 @@ class _AddScreenState extends State<AddScreen> {
                               ingredientes.removeAt(index);
                             });
                           },
+                          color: Colors.red,
                         ),
                       ],
                     ),
                   );
                 },
               ),
-              SizedBox(height: 20),
-              // TextField para o tempo de preparo da receita
+              SizedBox(height: 10),
+              // TextField para o tempo de preparo
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Tempo de preparo (em minutos)',
@@ -214,15 +231,17 @@ class _AddScreenState extends State<AddScreen> {
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5),
+                  fillColor: Colors.grey[200],
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  prefixIcon: Icon(Icons.timer),
                 ),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   tempo = int.tryParse(value);
                 },
               ),
+              SizedBox(height: 10),
               // TextField para o modo de preparo da receita
               TextField(
                 decoration: InputDecoration(
@@ -233,19 +252,28 @@ class _AddScreenState extends State<AddScreen> {
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Color(0xFFF5F5F5),
+                  fillColor: Colors.grey[200],
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  prefixIcon: Icon(Icons.receipt_long),
                 ),
                 maxLines: null,
                 onChanged: (value) {
                   modo = value;
                 },
               ),
-              Container(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () => _criarReceita(), child: Text('Postar')),
+              SizedBox(height: 20),
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 300,
+                  child: ElevatedButton(
+                    onPressed: () => _criarReceita(),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    child: Text('Postar'),
+                  ),
+                ),
               )
             ],
           ),
