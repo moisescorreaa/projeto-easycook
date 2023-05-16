@@ -83,8 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
           context: context,
           title: 'Cheque seu email!',
           confirmBtnText: 'OK',
-          //confirmBtnColor: Color.fromRGBO(18, 192, 106, 1),
-          confirmBtnColor: Colors.red,
+          confirmBtnColor: Color.fromRGBO(18, 192, 106, 1),
           onConfirmBtnTap: () =>
               Navigator.of(context).popAndPushNamed('/login-page'),
           text:
