@@ -3,6 +3,8 @@ import 'package:easycook_main/model/usuarios.dart';
 import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool mostrarReceitasPublicadas = true;
   bool mostrarReceitasFavoritadas = false;
 
+  bool? verificado;
   String? username = "";
 
   final nomeController = TextEditingController();
@@ -42,10 +45,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     buscarDadosUsuario();
+    verificarUsuario();
+  }
+
+  void logout() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color(0xFFF5F5F5),
+        title: const Text(
+          'Você tem certeza que deseja sair?',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        actions: [
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Cancelar"),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.grey,
+              side: BorderSide(color: Colors.transparent),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => logoutFunc(),
+            child: Text("Continuar"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void logoutFunc() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Logout realizado com sucesso')),
+      );
+      Navigator.pushReplacementNamed(context, '/show-login-register');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Erro ao realizar logout')),
+      );
+    }
   }
 
   void buscarDadosUsuario() {
     username = auth.currentUser?.displayName;
+  }
+
+  bool? verificarUsuario() {
+    if (auth.currentUser?.emailVerified == true) {
+      verificado = true;
+    } else {
+      verificado = false;
+    }
+    return verificado;
   }
 
   // void alterarDadosUsuario() {
@@ -118,6 +182,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.red,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout_outlined, color: Colors.red),
+            onPressed: () => logout(),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -130,9 +200,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               backgroundImage: AssetImage('assets/user.png'),
             ),
             SizedBox(height: 16),
-            Text(
-              username!,
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    username!,
+                    style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                verificado == true
+                    ? Icon(
+                        Icons.verified_outlined,
+                        color: Colors.red,
+                      )
+                    : SizedBox.shrink()
+              ],
             ),
             SizedBox(height: 16),
             ElevatedButton(

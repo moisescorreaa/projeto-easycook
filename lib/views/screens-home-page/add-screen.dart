@@ -32,9 +32,8 @@ class _AddScreenState extends State<AddScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Campos obrigatórios não preenchidos'),
-            content: Text(
-                'Preencha todos os campos obrigatórios para criar a receita.'),
+            title: Text('Campos não preenchidos'),
+            content: Text('Preencha todos os campos para criar a receita.'),
             actions: <Widget>[
               TextButton(
                 child: Text('OK'),
@@ -256,7 +255,6 @@ class _AddScreenState extends State<AddScreen> {
                 },
               ),
               SizedBox(height: 10),
-              // TextField para o modo de preparo da receita
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Modo de preparo',

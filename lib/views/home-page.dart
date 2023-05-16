@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
         ],
         onPageChanged: setPaginaAtual,
       ),
-      // Barra de ícones selecionáveis
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.red,
         unselectedItemColor: Color(0xFF757575),
@@ -47,19 +46,19 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'Search',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
-            label: 'Add',
+            label: '',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Profile',
+            label: '',
           ),
         ],
         onTap: (pagina) {

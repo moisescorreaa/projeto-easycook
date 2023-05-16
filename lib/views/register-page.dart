@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easycook_main/model/usuarios.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -65,6 +62,21 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  void _confirmarEmail() async {
+    try {
+      await auth.currentUser!.sendEmailVerification();
+    } catch (error) {
+      print('Falha ao enviar a verificação de email: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Falha ao enviar a verificação de email'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
   void showAlert(value, String? respostaErro) {
     if (value == true) {
       QuickAlert.show(
@@ -76,8 +88,9 @@ class _RegisterPageState extends State<RegisterPage> {
           onConfirmBtnTap: () =>
               Navigator.of(context).popAndPushNamed('/login-page'),
           text:
-              '\nEstamos animados para acompanhar você nessa jornada culinária!!!\n\nEnviamos uma mensagem para a sua caixa de entrada com um link de confirmação!',
+              '\nEstamos animados para acompanhar você nessa jornada culinária!!!\n\nEnviamos um email para ${auth.currentUser?.email} com um link de confirmação!',
           type: QuickAlertType.success);
+      _confirmarEmail();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -114,7 +127,6 @@ class _RegisterPageState extends State<RegisterPage> {
         try {
           await auth.createUserWithEmailAndPassword(
               email: email, password: password);
-
           showAlert(true, null);
           salvarDadosUsuario();
         } on FirebaseAuthException catch (e) {
@@ -189,22 +201,23 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Color(0xFFF5F5F5),
-        child: Stack(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  child: Image.asset('assets/favicon_transparent_32x32.png'),
-                  margin: EdgeInsets.only(top: 50),
-                ),
-              ],
-            ),
-            Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(50),
+                    child: Image.asset('assets/favicon_transparent_32x32.png'),
+                  ),
+                ],
+              ),
+              Center(
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -397,8 +410,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
