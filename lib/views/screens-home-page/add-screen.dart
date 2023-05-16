@@ -101,17 +101,31 @@ class _AddScreenState extends State<AddScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: ListTile(
-                  leading: Icon(Icons.insert_photo_outlined),
-                  title: Text("Inserir imagem"),
+                child: InkWell(
                   onTap: selecionarImagem,
-                  trailing:
-                      imagem != null ? Image.file(File(imagem!.path)) : null,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: EdgeInsets.all(12.0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.insert_photo_outlined,
+                          color: Color.fromARGB(255, 100, 100, 100)
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Inserir Imagem',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 10),
