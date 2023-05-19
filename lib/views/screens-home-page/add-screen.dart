@@ -54,9 +54,6 @@ class _AddScreenState extends State<AddScreen> {
       modoDePreparo: modo,
       imagemReceita: imagem,
     );
-
-    // Aqui você pode fazer o que quiser com o objeto novaReceita.
-    // Por exemplo, adicionar à lista de receitas ou salvá-lo em um banco de dados.
   }
 
   selecionarImagem() async {
@@ -110,10 +107,8 @@ class _AddScreenState extends State<AddScreen> {
                     padding: EdgeInsets.all(12.0),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.insert_photo_outlined,
-                          color: Color.fromARGB(255, 100, 100, 100)
-                        ),
+                        Icon(Icons.insert_photo_outlined,
+                            color: Color.fromARGB(255, 100, 100, 100)),
                         SizedBox(width: 8.0),
                         Text(
                           'Inserir Imagem',
