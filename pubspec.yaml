@@ -38,6 +38,7 @@ dependencies:
   quickalert:
   firebase_core: 
   cloud_firestore: 
+  firebase_storage:
   firebase_auth:
   image_picker:
   file_picker:

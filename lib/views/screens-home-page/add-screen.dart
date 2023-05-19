@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,6 +13,9 @@ class AddScreen extends StatefulWidget {
 }
 
 class _AddScreenState extends State<AddScreen> {
+  FirebaseStorage storage = FirebaseStorage.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   XFile? imagem;
   String? titulo;
   String? descricao;
@@ -20,51 +25,30 @@ class _AddScreenState extends State<AddScreen> {
 
   final TextEditingController _ingredientsController = TextEditingController();
 
-  void _criarReceita() {
-    if (imagem == null ||
-        titulo == null ||
-        descricao == null ||
-        ingredientes.isEmpty ||
-        tempo == null ||
-        modo == null) {
-      // Se algum campo obrigatório não foi preenchido, exibe um aviso e retorna.
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Campos não preenchidos'),
-            content: Text('Preencha todos os campos para criar a receita.'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          );
-        },
-      );
-      return;
-    }
-
-    Receita novaReceita = Receita(
-      tituloReceita: titulo,
-      descricaoReceita: descricao,
-      ingredientesReceita: List.from(ingredientes),
-      tempoDePreparo: tempo,
-      modoDePreparo: modo,
-      imagemReceita: imagem,
-    );
+  Future<XFile?> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    imagem = await picker.pickImage(source: ImageSource.gallery);
   }
 
-  selecionarImagem() async {
-    final ImagePicker picker = ImagePicker();
-
+  Future<void> upload(String path) async {
+    File file = File(path);
     try {
-      XFile? file = await picker.pickImage(source: ImageSource.gallery);
-      if (file != null) setState(() => imagem = file);
-    } catch (e) {
-      print(e);
+      String ref =
+          'images/${auth.currentUser?.uid}/img-${DateTime.now().toString()}.jpg';
+      await storage.ref(ref).putFile(file);
+    } on FirebaseException catch (e) {
+      throw Exception('Erro no upload: ${e.code}');
     }
+  }
+
+  pickAndUploadImage() async {
+    if (imagem! != null) {
+      await upload(imagem!.path);
+    }
+  }
+
+  _criarReceita() {
+    pickAndUploadImage();
   }
 
   void _addIngredient() {
@@ -98,27 +82,33 @@ class _AddScreenState extends State<AddScreen> {
             children: [
               Container(
                 child: InkWell(
-                  onTap: selecionarImagem,
+                  onTap: () => pickImage(),
                   child: Container(
+                    width: 100,
+                    height: 200,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     padding: EdgeInsets.all(12.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.insert_photo_outlined,
-                            color: Color.fromARGB(255, 100, 100, 100)),
-                        SizedBox(width: 8.0),
-                        Text(
-                          'Inserir Imagem',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
+                    child: imagem != null
+                        ? Image.file(File(imagem!.path))
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.insert_photo_outlined,
+                                  color: Color.fromARGB(255, 100, 100, 100)),
+                              SizedBox(width: 8.0),
+                              Text(
+                                'Inserir Imagem',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
@@ -286,22 +276,4 @@ class _AddScreenState extends State<AddScreen> {
           ),
         ));
   }
-}
-
-class Receita {
-  final XFile? imagemReceita;
-  final String? tituloReceita;
-  final String? descricaoReceita;
-  final List<String> ingredientesReceita;
-  final int? tempoDePreparo;
-  final String? modoDePreparo;
-
-  Receita({
-    required this.imagemReceita,
-    required this.tituloReceita,
-    required this.descricaoReceita,
-    required this.ingredientesReceita,
-    required this.tempoDePreparo,
-    required this.modoDePreparo,
-  });
 }
