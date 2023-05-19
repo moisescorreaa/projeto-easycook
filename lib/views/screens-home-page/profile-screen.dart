@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easycook_main/model/usuarios.dart';
 import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 
@@ -36,8 +39,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool mostrarReceitasPublicadas = true;
   bool mostrarReceitasFavoritadas = false;
 
-  bool? verificado;
+  bool verificado = false;
   String? username = "";
+  String? imagemURL;
+  XFile? imagem;
+
+  TextEditingController newUsername = TextEditingController();
 
   final nomeController = TextEditingController();
 
@@ -71,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           ElevatedButton(
             onPressed: () => logoutFunc(),
-            child: Text("Continuar"),
+            child: Text("Confirmar"),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
             ),
@@ -100,7 +107,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void buscarDadosUsuario() {
-    username = auth.currentUser?.displayName;
+    setState(() {
+      username = auth.currentUser?.displayName;
+      imagemURL = auth.currentUser?.photoURL;
+    });
   }
 
   bool? verificarUsuario() {
@@ -112,6 +122,120 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return verificado;
   }
 
+  void alterarDadosUsuario() {
+    if (newUsername != null) {
+      try {
+        setState(() {
+          auth.currentUser?.updateDisplayName(newUsername.text);
+          // auth.currentUser?.updatePhotoURL(imagemURL);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Dados alterados com sucesso'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        Navigator.of(context).pop();
+      } catch (e) {
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('Ocorreu um erro ao alterar os dados'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
+  pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    imagem = await picker.pickImage(source: ImageSource.gallery);
+  }
+
+  void _editDataProfile() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Color(0xFFF5F5F5),
+        title: const Text(
+          "Editar Perfil",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: () => pickImage(),
+              child: Container(
+                width: double.maxFinite,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                padding: const EdgeInsets.all(12.0),
+                child: imagem != null
+                    ? Image.file(File(imagem!.path))
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.insert_photo_outlined,
+                              color: Color.fromARGB(255, 100, 100, 100)),
+                          SizedBox(width: 8.0),
+                          Text(
+                            'Inserir Imagem',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: newUsername,
+              decoration: InputDecoration(
+                labelText: "Novo nome de perfil",
+                labelStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("Cancelar"),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.grey,
+              side: BorderSide(color: Colors.transparent),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => alterarDadosUsuario(),
+            child: Text("Enviar"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   // void alterarDadosUsuario() {
   //   db
   //       .collection("usuarios").doc(auth.currentUser!.displayName)
@@ -221,7 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () => _editDataProfile(),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFD32F2F),
               ),
