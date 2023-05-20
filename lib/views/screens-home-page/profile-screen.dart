@@ -1,13 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easycook_main/model/usuarios.dart';
 import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:quickalert/models/quickalert_type.dart';
-import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -174,7 +171,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () => pickImage(),
               child: Container(
                 width: double.maxFinite,
-                height: 200,
+                height: 180,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(10.0),
@@ -200,7 +197,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
               ),
             ),
-            const SizedBox(height: 10),
             TextFormField(
               controller: newUsername,
               decoration: InputDecoration(
@@ -236,6 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
   // void alterarDadosUsuario() {
   //   db
   //       .collection("usuarios").doc(auth.currentUser!.displayName)
