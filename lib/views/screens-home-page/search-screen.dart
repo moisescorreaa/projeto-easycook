@@ -103,10 +103,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Receitas mais populares',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Receitas mais populares',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ],
@@ -149,24 +152,25 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             flex: 1,
                             child: Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    _postagens[index].titulo,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    _postagens[index].descricao,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Text(
+                                          _postagens[index].titulo,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -175,22 +179,21 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             flex: 1,
                             child: Padding(
-                              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              padding: EdgeInsets.only(
+                                  left: 16, bottom: 16, right: 16),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${_postagens[index].numeroCurtidas} ${_postagens[index].numeroCurtidas == 1 ? "curtida" : "curtidas"}',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.red,
-                                        ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      '${_postagens[index].numeroCurtidas} ${_postagens[index].numeroCurtidas == 1 ? "curtida" : "curtidas"}',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.red,
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),

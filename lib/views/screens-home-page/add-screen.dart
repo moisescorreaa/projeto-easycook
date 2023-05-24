@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -30,25 +31,35 @@ class _AddScreenState extends State<AddScreen> {
     imagem = await picker.pickImage(source: ImageSource.gallery);
   }
 
-  Future<void> upload(String path) async {
-    File file = File(path);
+  Future<void> salvarReceita() async {
     try {
-      String ref =
-          'images/${auth.currentUser?.uid}/img-${DateTime.now().toString()}.jpg';
-      await storage.ref(ref).putFile(file);
-    } on FirebaseException catch (e) {
-      throw Exception('Erro no upload: ${e.code}');
-    }
-  }
+      // Upload da imagem para o Firebase Storage
+      String imagemRef =
+          'images/${auth.currentUser?.uid}/receitas/img-${DateTime.now().toString()}.jpg';
+      Reference storageRef = FirebaseStorage.instance.ref().child(imagemRef);
+      await storageRef.putFile(File(imagem!.path));
 
-  pickAndUploadImage() async {
-    if (imagem! != null) {
-      await upload(imagem!.path);
-    }
-  }
+      // Obtenção do URL da imagem
+      String imageUrl = await storageRef.getDownloadURL();
 
-  _criarReceita() {
-    pickAndUploadImage();
+      // Criação do documento da receita no Firestore
+      CollectionReference receitasRef =
+          FirebaseFirestore.instance.collection('receitas');
+      await receitasRef.add({
+        'username': auth.currentUser?.displayName,
+        'imagemRef': imagemRef,
+        'imageUrl': imageUrl,
+        'titulo': titulo,
+        'descricao': descricao,
+        'ingredientes': ingredientes,
+        'tempo': tempo,
+        'modo': modo,
+        'curtidas': 0,
+      });
+    } catch (e) {
+      // Lida com erros, se houver
+      print('Erro ao salvar a receita: $e');
+    }
   }
 
   void _addIngredient() {
@@ -113,7 +124,6 @@ class _AddScreenState extends State<AddScreen> {
                 ),
               ),
               SizedBox(height: 10),
-              // TextField para o título da receita
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Título da receita',
@@ -135,9 +145,7 @@ class _AddScreenState extends State<AddScreen> {
                 },
                 style: TextStyle(fontSize: 16),
               ),
-
               SizedBox(height: 10),
-              // TextField para a descrição da receita
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Descrição',
@@ -160,7 +168,6 @@ class _AddScreenState extends State<AddScreen> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 10),
-              // TextField para a lista de ingredientes da receita
               Row(
                 children: [
                   Expanded(
@@ -219,7 +226,6 @@ class _AddScreenState extends State<AddScreen> {
                 },
               ),
               SizedBox(height: 10),
-              // TextField para o tempo de preparo
               TextField(
                 decoration: InputDecoration(
                   hintText: 'Tempo de preparo (em minutos)',
@@ -265,7 +271,7 @@ class _AddScreenState extends State<AddScreen> {
                 child: SizedBox(
                   width: 300,
                   child: ElevatedButton(
-                    onPressed: () => _criarReceita(),
+                    onPressed: () => salvarReceita(),
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     child: Text('Postar'),

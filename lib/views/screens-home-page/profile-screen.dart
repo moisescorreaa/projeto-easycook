@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easycook_main/views/screens-home-page/recipe-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -40,10 +41,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? username = "";
   String? imagemURL;
   XFile? imagem;
+  String? newimagemURL =
+      'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fuser.png?alt=media&token=882e3a0b-9075-4ad0-a527-9ee628d8ea29';
 
-  TextEditingController newUsername = TextEditingController();
-
-  final nomeController = TextEditingController();
+  String? newUsername;
 
   @override
   void initState() {
@@ -112,20 +113,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   bool? verificarUsuario() {
     if (auth.currentUser?.emailVerified == true) {
-      verificado = true;
+      setState(() {
+        verificado = true;
+      });
     } else {
-      verificado = false;
+      setState(() {
+        verificado = false;
+      });
     }
     return verificado;
   }
 
-  void alterarDadosUsuario() {
-    if (newUsername != null) {
-      try {
-        setState(() {
-          auth.currentUser?.updateDisplayName(newUsername.text);
-          // auth.currentUser?.updatePhotoURL(imagemURL);
-        });
+  Future<void> alterarDadosUsuario() async {
+    try {
+      bool dadosAlterados = false;
+
+      if (imagem != null) {
+        String imagemRef =
+            'images/${auth.currentUser?.uid}/perfil/img-${DateTime.now().toString()}.jpg';
+        Reference storageRef = FirebaseStorage.instance.ref().child(imagemRef);
+        await storageRef.putFile(File(imagem!.path));
+        newimagemURL = await storageRef.getDownloadURL();
+
+        auth.currentUser?.updatePhotoURL(newimagemURL);
+        dadosAlterados = true;
+      }
+
+      if (newUsername != null && newUsername!.isNotEmpty) {
+        auth.currentUser?.updateDisplayName(newUsername);
+        dadosAlterados = true;
+      }
+
+      if (dadosAlterados) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
@@ -133,17 +152,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             duration: Duration(seconds: 3),
           ),
         );
-        Navigator.of(context).pop();
-      } catch (e) {
-        print(e);
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.red,
-            content: Text('Ocorreu um erro ao alterar os dados'),
+            content: Text('Nenhuma alteração realizada'),
             duration: Duration(seconds: 3),
           ),
         );
       }
+
+      Navigator.of(context).pop();
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Ocorreu um erro ao alterar os dados'),
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 
@@ -164,81 +192,92 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Colors.red,
           ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            InkWell(
-              onTap: () => pickImage(),
-              child: Container(
-                width: double.maxFinite,
-                height: 180,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                padding: const EdgeInsets.all(12.0),
-                child: imagem != null
-                    ? Image.file(File(imagem!.path))
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.insert_photo_outlined,
-                              color: Color.fromARGB(255, 100, 100, 100)),
-                          SizedBox(width: 8.0),
-                          Text(
-                            'Inserir Imagem',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () => pickImage(),
+                child: Container(
+                  width: double.maxFinite,
+                  height: 180,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  padding: const EdgeInsets.all(12.0),
+                  child: imagem != null
+                      ? Image.file(File(imagem!.path))
+                      : Container(
+                          width: double.maxFinite,
+                          height: 180,
+                          padding: const EdgeInsets.all(12.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ],
-                      ),
-              ),
-            ),
-            TextFormField(
-              controller: newUsername,
-              decoration: InputDecoration(
-                labelText: "Novo nome de perfil",
-                labelStyle: const TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.insert_photo_outlined,
+                                  color: Color.fromARGB(255, 100, 100, 100)),
+                              SizedBox(width: 8.0),
+                              Text(
+                                'Inserir Imagem',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                onChanged: (value) {
+                  newUsername = value;
+                },
+                decoration: InputDecoration(
+                  labelText: "Novo nome de perfil",
+                  labelStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  OutlinedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("Cancelar"),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                      side: BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => alterarDadosUsuario(),
+                    child: Text("Enviar"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        actions: [
-          OutlinedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text("Cancelar"),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.grey,
-              side: BorderSide(color: Colors.transparent),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => alterarDadosUsuario(),
-            child: Text("Enviar"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-            ),
-          ),
-        ],
       ),
     );
   }
-
-  // void alterarDadosUsuario() {
-  //   db
-  //       .collection("usuarios").doc(auth.currentUser!.displayName)
-  //       ..update({'username' :  });
-
-  // }
 
   final List<Receita> _receitasPublicadas = [
     Receita(
@@ -318,7 +357,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CircleAvatar(
               backgroundColor: Colors.transparent,
               radius: 50,
-              backgroundImage: AssetImage('assets/user.png'),
+              backgroundImage: NetworkImage(imagemURL!),
             ),
             SizedBox(height: 16),
             Row(
@@ -326,10 +365,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.all(10),
-                  child: Text(
-                    username!,
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      username!,
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 verificado == true

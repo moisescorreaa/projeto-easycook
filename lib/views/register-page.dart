@@ -115,8 +115,11 @@ class _RegisterPageState extends State<RegisterPage> {
     Usuarios novoUsuario = Usuarios(
       usernameUsuario: username,
       id: auth.currentUser!.uid,
+      fotoPerfil:
+          'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fuser.png?alt=media&token=882e3a0b-9075-4ad0-a527-9ee628d8ea29',
     );
     auth.currentUser?.updateDisplayName(novoUsuario.usernameUsuario);
+    auth.currentUser?.updatePhotoURL(novoUsuario.fotoPerfil);
   }
 
   registrar(BuildContext context) async {
