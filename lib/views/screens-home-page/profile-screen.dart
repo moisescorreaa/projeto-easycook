@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,12 +39,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool mostrarReceitasPublicadas = true;
   bool mostrarReceitasFavoritadas = false;
 
-  bool verificado = false;
-  String? username = "";
+  bool? verificado;
+  String? username;
   String? imagemURL;
   XFile? imagem;
-  String? newimagemURL =
-      'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fuser.png?alt=media&token=882e3a0b-9075-4ad0-a527-9ee628d8ea29';
 
   String? newUsername;
 
@@ -111,17 +111,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  bool? verificarUsuario() {
+  verificarUsuario() {
     if (auth.currentUser?.emailVerified == true) {
-      setState(() {
-        verificado = true;
-      });
+      setState(() => verificado = true);
     } else {
-      setState(() {
-        verificado = false;
-      });
+      setState(() => verificado = false);
     }
-    return verificado;
   }
 
   Future<void> alterarDadosUsuario() async {
@@ -133,14 +128,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'images/${auth.currentUser?.uid}/perfil/img-${DateTime.now().toString()}.jpg';
         Reference storageRef = FirebaseStorage.instance.ref().child(imagemRef);
         await storageRef.putFile(File(imagem!.path));
-        newimagemURL = await storageRef.getDownloadURL();
+        imagemURL = await storageRef.getDownloadURL();
+        setState(() => imagemURL);
 
-        auth.currentUser?.updatePhotoURL(newimagemURL);
+        auth.currentUser?.updatePhotoURL(imagemURL);
         dadosAlterados = true;
       }
 
       if (newUsername != null && newUsername!.isNotEmpty) {
         auth.currentUser?.updateDisplayName(newUsername);
+        setState(() => username = newUsername);
         dadosAlterados = true;
       }
 
@@ -177,105 +174,119 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   pickImage() async {
     final ImagePicker picker = ImagePicker();
-    imagem = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      imagem = await picker.pickImage(source: ImageSource.gallery);
+      if (imagem != null) {
+        setState(() => imagem);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
-  void _editDataProfile() {
+  void _editDataProfile(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Color(0xFFF5F5F5),
-        title: const Text(
-          "Editar Perfil",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
+      builder: (context) => StatefulBuilder(builder: (context, setState) {
+        return AlertDialog(
+          backgroundColor: Color(0xFFF5F5F5),
+          title: const Text(
+            "Editar Perfil",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
           ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              InkWell(
-                onTap: () => pickImage(),
-                child: Container(
-                  width: double.maxFinite,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  padding: const EdgeInsets.all(12.0),
-                  child: imagem != null
-                      ? Image.file(File(imagem!.path))
-                      : Container(
-                          width: double.maxFinite,
-                          height: 180,
-                          padding: const EdgeInsets.all(12.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.insert_photo_outlined,
-                                  color: Color.fromARGB(255, 100, 100, 100)),
-                              SizedBox(width: 8.0),
-                              Text(
-                                'Inserir Imagem',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0,
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  onTap: () => pickImage().then((_) {
+                    setState(
+                        () {}); // Atualiza a interface do pop-up após selecionar a imagem
+                  }),
+                  child: Container(
+                    width: double.maxFinite,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: const EdgeInsets.all(12.0),
+                    child: imagem != null
+                        ? Image.file(File(imagem!.path))
+                        : Container(
+                            width: double.maxFinite,
+                            height: 180,
+                            padding: const EdgeInsets.all(12.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [
+                                Icon(Icons.insert_photo_outlined,
+                                    color: Color.fromARGB(255, 100, 100, 100)),
+                                SizedBox(width: 8.0),
+                                Text(
+                                  'Inserir Imagem',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                onChanged: (value) {
-                  newUsername = value;
-                },
-                decoration: InputDecoration(
-                  labelText: "Novo nome de perfil",
-                  labelStyle: const TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text("Cancelar"),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.grey,
-                      side: BorderSide(color: Colors.transparent),
+                SizedBox(height: 20),
+                TextFormField(
+                  onChanged: (value) {
+                    setState(() {
+                      newUsername = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: "Novo nome de perfil",
+                    labelStyle: const TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () => alterarDadosUsuario(),
-                    child: Text("Enviar"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text("Cancelar"),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.grey,
+                        side: BorderSide(color: Colors.transparent),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    ElevatedButton(
+                      onPressed: () => alterarDadosUsuario(),
+                      child: Text("Enviar"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -384,7 +395,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => _editDataProfile(),
+              onPressed: () => _editDataProfile(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFFD32F2F),
               ),

@@ -26,9 +26,16 @@ class _AddScreenState extends State<AddScreen> {
 
   final TextEditingController _ingredientsController = TextEditingController();
 
-  Future<XFile?> pickImage() async {
+  pickImage() async {
     final ImagePicker picker = ImagePicker();
-    imagem = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      imagem = await picker.pickImage(source: ImageSource.gallery);
+      if (imagem != null) {
+        setState(() => imagem);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> salvarReceita() async {
@@ -46,7 +53,8 @@ class _AddScreenState extends State<AddScreen> {
       CollectionReference receitasRef =
           FirebaseFirestore.instance.collection('receitas');
       await receitasRef.add({
-        'username': auth.currentUser?.displayName,
+        'usernameRef': auth.currentUser?.displayName,
+        'fotoPerfilRef': auth.currentUser?.photoURL,
         'imagemRef': imagemRef,
         'imageUrl': imageUrl,
         'titulo': titulo,
