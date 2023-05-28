@@ -91,7 +91,7 @@ class _AddScreenState extends State<AddScreen> {
           ingredientes = [];
           tempo = null;
           modo = '';
-          _ingredientsController?.text = '';
+          _ingredientsController.text = '';
         });
 
         // ignore: use_build_context_synchronously
