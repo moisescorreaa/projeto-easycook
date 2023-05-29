@@ -15,3 +15,4 @@ Este aplicativo é um repositório de receitas que permite aos usuários pesquis
 * Flutter
 * Dart
 * Firebase
+Teste git
