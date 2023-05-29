@@ -27,6 +27,10 @@ class _AddScreenState extends State<AddScreen> {
   String? modo;
 
   TextEditingController _ingredientsController = TextEditingController();
+  TextEditingController tituloController = TextEditingController();
+  TextEditingController descricaoController = TextEditingController();
+  TextEditingController tempoController = TextEditingController();
+  TextEditingController modoController = TextEditingController();
 
   String? _validarCampos(String? value) {
     if (value == null || value.isEmpty) {
@@ -72,8 +76,7 @@ class _AddScreenState extends State<AddScreen> {
         CollectionReference receitasRef =
             FirebaseFirestore.instance.collection('receitas');
         await receitasRef.add({
-          'usernameRef': auth.currentUser?.displayName,
-          'fotoPerfilRef': auth.currentUser?.photoURL,
+          'uidUser': auth.currentUser?.uid,
           'imagemRef': imagemRef,
           'imageUrl': imageUrl,
           'titulo': titulo,
@@ -92,6 +95,11 @@ class _AddScreenState extends State<AddScreen> {
           tempo = null;
           modo = '';
           _ingredientsController.text = '';
+          tituloController.clear();
+          descricaoController.clear();
+          tempoController.clear();
+          modoController.clear();
+          _ingredientsController.clear();
         });
 
         // ignore: use_build_context_synchronously
@@ -178,6 +186,7 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(
+                  controller: tituloController,
                   decoration: InputDecoration(
                     hintText: 'Título da receita',
                     hintStyle: TextStyle(color: Colors.black),
@@ -201,6 +210,7 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(
+                  controller: descricaoController,
                   validator: _validarCampos,
                   decoration: InputDecoration(
                     hintText: 'Descrição',
@@ -283,6 +293,7 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(
+                  controller: tempoController,
                   validator: _validarCampos,
                   decoration: InputDecoration(
                     hintText: 'Tempo de preparo (em minutos)',
@@ -304,6 +315,7 @@ class _AddScreenState extends State<AddScreen> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(
+                  controller: modoController,
                   validator: _validarCampos,
                   decoration: InputDecoration(
                     hintText: 'Modo de preparo',
