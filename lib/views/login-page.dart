@@ -159,10 +159,11 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(50),
-                    child: Transform.scale(
-                      scale: 2.0, // duplica o tamanho
-                      child:
-                          Image.asset('assets/favicon_transparent_32x32.png'),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      child: Image.asset(
+                          'assets/default_transparent_cortada_ico.png'),
                     ),
                   ),
                 ],

@@ -85,6 +85,7 @@ class _AddScreenState extends State<AddScreen> {
           'tempo': tempo,
           'modo': modo,
           'curtidas': 0,
+          'dateTime': DateTime.now(),
         });
 
         setState(() {
