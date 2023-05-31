@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easycook_main/views/screens-home-page/home-detail-screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,24 +17,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   DateTime now = DateTime.now();
   DateTime? startDate;
+
   inicializaData() {
     startDate = DateTime(now.year, now.month, 1);
+  }
+
+  void navigateToRecipeDetail(DocumentSnapshot recipeDocument) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              RecipeDetailScreen(recipeDocument: recipeDocument)),
+    );
   }
 
   showDatePickerDialog() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: startDate!, 
-      firstDate: DateTime(
-          2000),
+      initialDate: startDate!,
+      firstDate: DateTime(2000),
       lastDate: DateTime(2101),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: ColorScheme.light(
-              primary: Colors.red, 
-              onPrimary: Colors.white, 
-              onSurface: Colors.red, 
+              primary: Colors.red,
+              onPrimary: Colors.white,
+              onSurface: Colors.red,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -195,6 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   TextButton(
                                     onPressed: () {
                                       // Navegue para a tela de detalhes da receita
+                                      navigateToRecipeDetail(document);
                                     },
                                     child: Text(
                                       'Ver receita',
