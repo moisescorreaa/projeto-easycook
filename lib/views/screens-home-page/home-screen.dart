@@ -14,7 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
     inicializaData();
   }
 
-
   DateTime now = DateTime.now();
   DateTime? startDate;
   inicializaData() {
@@ -23,29 +22,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   showDatePickerDialog() async {
     DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: startDate!, //get today's date
-        firstDate: DateTime(
-            2000), //DateTime.now() - not to allow to choose before today.
-        lastDate: DateTime(2101),
-        builder: (context, child) {
-      return Theme(
-        data: Theme.of(context).copyWith(
-          colorScheme: ColorScheme.light(
-            primary: Colors.red, // <-- SEE HERE
-            onPrimary: Colors.white, // <-- SEE HERE
-            onSurface: Colors.red, // <-- SEE HERE
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              primary: Colors.red, // button text color
+      context: context,
+      initialDate: startDate!, 
+      firstDate: DateTime(
+          2000),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.red, 
+              onPrimary: Colors.white, 
+              onSurface: Colors.red, 
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red, // button text color
+              ),
             ),
           ),
-        ),
-        child: child!,
-      );
-    },);
-        
+          child: child!,
+        );
+      },
+    );
 
     if (pickedDate != null) {
       setState(() {
