@@ -76,6 +76,8 @@ class _AddScreenState extends State<AddScreen> {
         CollectionReference receitasRef =
             FirebaseFirestore.instance.collection('receitas');
         await receitasRef.add({
+          'nameUser': auth.currentUser?.displayName,
+          'photoUser': auth.currentUser?.photoURL,
           'uidUser': auth.currentUser?.uid,
           'imagemRef': imagemRef,
           'imageUrl': imageUrl,
