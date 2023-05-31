@@ -22,12 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
     startDate = DateTime(now.year, now.month, 1);
   }
 
-  void navigateToRecipeDetail(DocumentSnapshot recipeDocument) {
+  void navigateToHomeRecipeDetail(DocumentSnapshot recipeDocument) {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) =>
-              RecipeDetailScreen(recipeDocument: recipeDocument)),
+              HomeRecipeDetailScreen(recipeDocument: recipeDocument)),
     );
   }
 
@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   TextButton(
                                     onPressed: () {
                                       // Navegue para a tela de detalhes da receita
-                                      navigateToRecipeDetail(document);
+                                      navigateToHomeRecipeDetail(document);
                                     },
                                     child: Text(
                                       'Ver receita',

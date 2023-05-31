@@ -1,18 +1,26 @@
-import 'package:easycook_main/views/screens-home-page/profile-screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RecipeScreen extends StatefulWidget {
-  final Receita receita;
+class ProfileRecipeDetailScreen extends StatefulWidget {
+  final DocumentSnapshot recipeDocument;
 
-  RecipeScreen({required this.receita});
+  ProfileRecipeDetailScreen({required this.recipeDocument});
 
   @override
-  _RecipeScreenState createState() => _RecipeScreenState();
+  _ProfileRecipeDetailScreenState createState() => _ProfileRecipeDetailScreenState();
 }
 
-class _RecipeScreenState extends State<RecipeScreen> {
+class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final titulo = widget.recipeDocument['titulo'];
+    final imageUrl = widget.recipeDocument['imageUrl'];
+    final descricao = widget.recipeDocument['descricao'];
+    final ingredientes = widget.recipeDocument['ingredientes'];
+    final modo = widget.recipeDocument['modo'];
+    final tempo = widget.recipeDocument['tempo'];
+
     return Scaffold(
       backgroundColor: Color(0xFFF5F5F5),
       appBar: AppBar(
@@ -31,14 +39,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit, color: Colors.red),
-            onPressed: () {
-              setState(() {});
-            },
-          ),
-        ],
+        
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -51,19 +52,19 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: AssetImage(widget.receita.imagemReceita),
+                    image: NetworkImage(imageUrl),
                     fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
               SizedBox(height: 16),
               Text(
-                widget.receita.tituloReceita,
+                titulo,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
               Text(
-                widget.receita.descricaoReceita,
+                descricao,
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 16),
@@ -72,9 +73,14 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8),
-              Text(
-                widget.receita.ingredientesReceita,
-                style: TextStyle(fontSize: 18),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: ingredientes.map<Widget>((ingrediente) {
+                  return Text(
+                    ingrediente.toString(),
+                    style: TextStyle(fontSize: 18),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 16),
               Text(
@@ -83,7 +89,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
               ),
               SizedBox(height: 8),
               Text(
-                widget.receita.modoDePreparo,
+                modo,
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 16),
@@ -93,7 +99,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
               ),
               SizedBox(height: 8),
               Text(
-                widget.receita.tempoDePreparo,
+                "${tempo.toString()} minutos",
                 style: TextStyle(fontSize: 18),
               ),
             ],

@@ -2,16 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RecipeDetailScreen extends StatefulWidget {
+class HomeRecipeDetailScreen extends StatefulWidget {
   final DocumentSnapshot recipeDocument;
 
-  RecipeDetailScreen({required this.recipeDocument});
+  HomeRecipeDetailScreen({required this.recipeDocument});
 
   @override
-  _RecipeDetailScreenState createState() => _RecipeDetailScreenState();
+  _HomeRecipeDetailScreenState createState() => _HomeRecipeDetailScreenState();
 }
 
-class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+class _HomeRecipeDetailScreenState extends State<HomeRecipeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final titulo = widget.recipeDocument['titulo'];
