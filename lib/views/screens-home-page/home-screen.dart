@@ -124,8 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
                               child: Row(
                                 children: [
-                                  CircleAvatar(
-                                    child: Image.network(photoUser),
+                                  CircleAvatar(backgroundColor: Colors.transparent,
+                                    backgroundImage: NetworkImage(photoUser),
                                     maxRadius: 10,
                                   ),
                                   SizedBox(width: 8),
