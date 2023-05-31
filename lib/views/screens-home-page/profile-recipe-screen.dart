@@ -8,10 +8,62 @@ class ProfileRecipeDetailScreen extends StatefulWidget {
   ProfileRecipeDetailScreen({required this.recipeDocument});
 
   @override
-  _ProfileRecipeDetailScreenState createState() => _ProfileRecipeDetailScreenState();
+  _ProfileRecipeDetailScreenState createState() =>
+      _ProfileRecipeDetailScreenState();
 }
 
 class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
+  Future<void> deleteRecipe() async {
+    // Pega a referencia do documento
+    final recipeRef = widget.recipeDocument.reference;
+
+    // deleta o documento do banco
+    await recipeRef.delete();
+
+    // volta para tela anterior
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+  }
+
+  deleteRecipeDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Você tem certeza que deseja excluir sua receita?'),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancelar"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OutlinedButton(
+                    onPressed: () => deleteRecipe(),
+                    child: Text("Continuar"),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      side: BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final titulo = widget.recipeDocument['titulo'];
@@ -39,7 +91,6 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -101,6 +152,20 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
               Text(
                 "${tempo.toString()} minutos",
                 style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: deleteRecipeDialog,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.red,
+                    ),
+                    child: Text('Excluir Receita'),
+                  ),
+                ],
               ),
             ],
           ),
