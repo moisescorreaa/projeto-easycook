@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easycook_main/views/screens-home-page/edit-recipe-screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -64,6 +65,16 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
     );
   }
 
+  _navigateToEditDetailRecipe() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            EditRecipeScreen(recipeDocument: widget.recipeDocument),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final titulo = widget.recipeDocument['titulo'];
@@ -91,6 +102,11 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
           icon: Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+              onPressed: () => _navigateToEditDetailRecipe(),
+              icon: Icon(Icons.edit_rounded, color: Colors.red))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
