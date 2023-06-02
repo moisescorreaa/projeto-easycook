@@ -154,14 +154,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                 ),
                 keyboardType: TextInputType.number,
               ),
+              SizedBox(height: 16),
               ElevatedButton(
-                    onPressed: updateRecipe,
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
-                    ),
-                    child: Text('Salvar Alterações'),
-                  ),
+                onPressed: updateRecipe,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red,
+                ),
+                child: Text('Salvar Alterações'),
+              ),
             ],
           ),
         ),
