@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditRecipeScreen extends StatefulWidget {
   final DocumentSnapshot recipeDocument;
@@ -11,16 +16,25 @@ class EditRecipeScreen extends StatefulWidget {
 }
 
 class _EditRecipeScreenState extends State<EditRecipeScreen> {
+  FirebaseStorage storage = FirebaseStorage.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   final tituloController = TextEditingController();
   final descricaoController = TextEditingController();
   final ingredientesController = TextEditingController();
   final modoController = TextEditingController();
   final tempoController = TextEditingController();
 
+  XFile? imagem;
+
+  String? imagemAntiga;
+
   @override
   void initState() {
     super.initState();
     // Preenche os controladores com os dados atuais da receita
+    imagemAntiga = widget.recipeDocument['imageUrl'];
+
     tituloController.text = widget.recipeDocument['titulo'];
     descricaoController.text = widget.recipeDocument['descricao'];
     ingredientesController.text =
@@ -40,20 +54,58 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     super.dispose();
   }
 
-  void updateRecipe() {
-    final recipeRef = widget.recipeDocument.reference;
+  Future<void> updateRecipe() async {
+    try {
+      final recipeRef = widget.recipeDocument.reference;
 
-    // Atualiza os dados no banco de dados usando o método "update"
-    recipeRef.update({
-      'titulo': tituloController.text,
-      'descricao': descricaoController.text,
-      'ingredientes': ingredientesController.text.split('\n'),
-      'modo': modoController.text,
-      'tempo': int.parse(tempoController.text),
-    });
+      // Upload da imagem para o Firebase Storage
+      String imagemRef =
+          'images/${auth.currentUser?.uid}/receitas/img-${DateTime.now().toString()}.jpg';
+      Reference storageRef = FirebaseStorage.instance.ref().child(imagemRef);
+      await storageRef.putFile(File(imagem!.path));
 
-    // Volta para a tela anterior
-    Navigator.pop(context);
+      // Obtenção do URL da imagem
+      String imageUrl = await storageRef.getDownloadURL();
+
+      // Atualiza os dados no banco de dados usando o método "update"
+      recipeRef.update({
+        'imageUrl': imageUrl,
+        'titulo': tituloController.text,
+        'descricao': descricaoController.text,
+        'ingredientes': ingredientesController.text.split('\n'),
+        'modo': modoController.text,
+        'tempo': int.parse(tempoController.text),
+      });
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Receita alterada com sucesso!'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      // Volta para a tela anterior
+      Navigator.pop(context);
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ocorreu um erro ao alterar a receita'),
+            backgroundColor: Colors.red,
+          ),
+        );
+    }
+  }
+
+  pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      imagem = await picker.pickImage(source: ImageSource.gallery);
+      if (imagem != null) {
+        setState(() => imagem);
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -81,6 +133,22 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+              Container(
+                width: double.maxFinite,
+                height: 200,
+                child: InkWell(
+                  onTap: () => pickImage(),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      padding: EdgeInsets.all(12.0),
+                      child: imagem != null
+                          ? Image.file(File(imagem!.path))
+                          : Image.network(imagemAntiga!)),
+                ),
+              ),
               Container(child: Text("Titulo")),
               TextField(
                 controller: tituloController,

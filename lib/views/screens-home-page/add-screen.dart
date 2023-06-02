@@ -118,6 +118,12 @@ class _AddScreenState extends State<AddScreen> {
       } catch (e) {
         // Lida com erros, se houver
         print('Erro ao salvar a receita: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Ocorreu um erro ao postar a receita'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
