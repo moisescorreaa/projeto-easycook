@@ -25,7 +25,6 @@ class _AddScreenState extends State<AddScreen> {
   List<String> ingredientes = [];
   int? tempo;
   String? modo;
-  String? ingredients;
 
   TextEditingController _ingredientsController = TextEditingController();
   TextEditingController tituloController = TextEditingController();
@@ -35,9 +34,7 @@ class _AddScreenState extends State<AddScreen> {
 
   String? _validarCampos(String? value) {
     if (value == null || value.isEmpty) {
-      
       return 'Campo obrigatório';
-
     }
     return null;
   }
@@ -251,9 +248,6 @@ class _AddScreenState extends State<AddScreen> {
                       child: TextFormField(
                         validator: _validarCamposIn,
                         controller: _ingredientsController,
-                        onChanged: (value) {
-                    ingredients = value;
-                  },
                         decoration: InputDecoration(
                           hintText: 'Digite o ingrediente',
                           hintStyle: TextStyle(color: Colors.black),
