@@ -14,6 +14,13 @@ class ProfileRecipeDetailScreen extends StatefulWidget {
 }
 
 class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
+  late String titulo;
+  late String imageUrl;
+  late String descricao;
+  late List<dynamic> ingredientes;
+  late String modo;
+  late int tempo;
+
   Future<void> deleteRecipe() async {
     // Pega a referencia do documento
     final recipeRef = widget.recipeDocument.reference;
@@ -77,116 +84,148 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final titulo = widget.recipeDocument['titulo'];
-    final imageUrl = widget.recipeDocument['imageUrl'];
-    final descricao = widget.recipeDocument['descricao'];
-    final ingredientes = widget.recipeDocument['ingredientes'];
-    final modo = widget.recipeDocument['modo'];
-    final tempo = widget.recipeDocument['tempo'];
+    return StreamBuilder<DocumentSnapshot>(
+      stream: widget.recipeDocument.reference.snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Erro: ${snapshot.error}');
+        }
 
-    return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFF5F5F5),
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          'EasyCook',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.red),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () => _navigateToEditDetailRecipe(),
-              icon: Icon(Icons.edit_rounded, color: Colors.red))
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(imageUrl),
-                    fit: BoxFit.fitWidth,
-                  ),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Color(0xFFF5F5F5),
+              elevation: 0,
+              centerTitle: true,
+              title: Text(
+                'EasyCook',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
-                titulo,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        // Atualiza os atributos com os dados do snapshot
+        final data = snapshot.data!.data() as Map<String, dynamic>;
+        titulo = data['titulo'];
+        imageUrl = data['imageUrl'];
+        descricao = data['descricao'];
+        ingredientes = data['ingredientes'];
+        modo = data['modo'];
+        tempo = data['tempo'];
+
+        return Scaffold(
+          backgroundColor: Color(0xFFF5F5F5),
+          appBar: AppBar(
+            backgroundColor: Color(0xFFF5F5F5),
+            elevation: 0,
+            centerTitle: true,
+            title: Text(
+              'EasyCook',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
               ),
-              SizedBox(height: 16),
-              Text(
-                descricao,
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Ingredientes:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Column(
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.red),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () => _navigateToEditDetailRecipe(),
+                  icon: Icon(Icons.edit_rounded, color: Colors.red))
+            ],
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: ingredientes.map<Widget>((ingrediente) {
-                  return Text(
-                    ingrediente.toString(),
-                    style: TextStyle(fontSize: 18),
-                  );
-                }).toList(),
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Modo de preparo:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                modo,
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Tempo de preparo:",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                "${tempo.toString()} minutos",
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: deleteRecipeDialog,
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.red,
+                  Container(
+                    height: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(imageUrl),
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
-                    child: Text('Excluir Receita'),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    titulo,
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    descricao,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Ingredientes:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: ingredientes.map<Widget>((ingrediente) {
+                      return Text(
+                        ingrediente.toString(),
+                        style: TextStyle(fontSize: 18),
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Modo de preparo:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    modo,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Tempo de preparo:",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "${tempo.toString()} minutos",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: deleteRecipeDialog,
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.red,
+                        ),
+                        child: Text('Excluir Receita'),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
