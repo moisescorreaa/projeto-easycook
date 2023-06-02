@@ -22,15 +22,31 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
   late int tempo;
 
   Future<void> deleteRecipe() async {
-    // Pega a referencia do documento
-    final recipeRef = widget.recipeDocument.reference;
+    try {
+      // volta para tela anterior
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
 
-    // deleta o documento do banco
-    await recipeRef.delete();
+      // Pega a referencia do documento
+      final recipeRef = widget.recipeDocument.reference;
 
-    // volta para tela anterior
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
+      // deleta o documento do banco
+      await recipeRef.delete();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Receita excluída com sucesso!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ocorreu um erro ao excluir a receita'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   deleteRecipeDialog() async {
@@ -86,7 +102,8 @@ class _ProfileRecipeDetailScreenState extends State<ProfileRecipeDetailScreen> {
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
       stream: widget.recipeDocument.reference.snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Erro: ${snapshot.error}');
         }

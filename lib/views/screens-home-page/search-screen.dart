@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easycook_main/views/screens-home-page/home-detail-screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -7,43 +9,15 @@ class SearchScreen extends StatefulWidget {
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class Postagem {
-  final String imagem;
-  final String titulo;
-  final String descricao;
-  final int numeroCurtidas;
-  bool curtida;
-
-  Postagem({
-    required this.imagem,
-    required this.titulo,
-    required this.descricao,
-    this.curtida = false,
-    this.numeroCurtidas = 0,
-  });
-}
-
 class _SearchScreenState extends State<SearchScreen> {
-  final List<Postagem> _postagens = [
-    Postagem(
-      imagem: 'assets/lasanha-italiana.jpg',
-      titulo: 'Lasanha Italiana',
-      descricao:
-          'Aprenda a fazer uma deliciosa lasanha italiana com massa fresca e molho de tomate caseiro.',
-    ),
-    Postagem(
-      imagem: 'assets/bolo-chocolate.jpg',
-      titulo: 'Bolo de Chocolate',
-      descricao:
-          'Aprenda a fazer um bolo de chocolate fofinho com cobertura de brigadeiro.',
-    ),
-    Postagem(
-      imagem: 'assets/pizza-margherita.jpg',
-      titulo: 'Pizza Margherita',
-      descricao:
-          'Aprenda a fazer uma deliciosa pizza margherita com massa fina e crocante.',
-    ),
-  ];
+  void navigateToHomeRecipeDetail(DocumentSnapshot recipeDocument) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              HomeRecipeDetailScreen(recipeDocument: recipeDocument)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width - 60,
+              width: MediaQuery.of(context).size.width - 8,
               height: 50,
               child: TextFormField(
                 decoration: InputDecoration(
@@ -83,14 +57,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.filter_list_alt,
-                color: Color(0xFF757575),
-                size: 32.0,
-              ),
-            ),
           ],
         ),
         SizedBox(height: 20),
@@ -102,11 +68,11 @@ class _SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20),
+                      padding: const EdgeInsets.only(left: 8),
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          'Receitas mais populares',
+                          'Receitas populares',
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
@@ -117,92 +83,99 @@ class _SearchScreenState extends State<SearchScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  itemCount: _postagens.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.75,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemBuilder: (context, index) {
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                              ),
-                              child: Image.asset(
-                                _postagens[index].imagem,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('receitas')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final List<QueryDocumentSnapshot> recipes =
+                            snapshot.data!.docs;
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(10, 20, 10, 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Text(
-                                          _postagens[index].titulo,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                          itemCount: recipes.length,
+                          itemBuilder: (context, index) {
+                            final document = recipes[index];
+                            final imageUrl = document['imageUrl'];
+                            final titulo = document['titulo'];
+                            final curtidas = document['curtidas'];
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: GestureDetector(
+                                onTap: () =>
+                                    navigateToHomeRecipeDetail(document),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image: NetworkImage(imageUrl),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color:
+                                                  Colors.black.withOpacity(0.5),
+                                            ),
+                                            width: double.infinity,
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 4),
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(
+                                                titulo,
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 16, bottom: 16, right: 16),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      '${_postagens[index].numeroCurtidas} ${_postagens[index].numeroCurtidas == 1 ? "curtida" : "curtidas"}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.red,
-                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                        '${curtidas.toString()} ${curtidas == 1 ? "curtida" : "curtidas"}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ],
             ),
