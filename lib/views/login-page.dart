@@ -162,8 +162,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       height: 40,
                       width: 40,
-                      child: Image.asset(
-                          'assets/default_transparent_cortada_ico.png'),
+                      child: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fdefault_transparent_cortada_ico.png?alt=media&token=7a520e24-beb9-4e3c-abf0-b41bc1c6eb70&_gl=1*1eu811y*_ga*MTg4NDE3NTI2OC4xNjg1NDg4NzUw*_ga_CW55HF8NVT*MTY4NTgyNjUxMC4xNi4xLjE2ODU4Mjk2ODIuMC4wLjA.'),
                     ),
                   ),
                 ],

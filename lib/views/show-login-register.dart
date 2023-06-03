@@ -16,8 +16,8 @@ class _RegisterLoginPageState extends State<RegisterLoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: Image.asset(
-                  'assets/default_transparent_765x625_cropped.png',
+                child: Image.network(
+                  'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fdefault_transparent_765x625_cropped.png?alt=media&token=5a5b7526-2d2d-4eae-9c0d-acee205374cd&_gl=1*1v3ky20*_ga*MTg4NDE3NTI2OC4xNjg1NDg4NzUw*_ga_CW55HF8NVT*MTY4NTgyNjUxMC4xNi4xLjE2ODU4MzAxNjMuMC4wLjA.',
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.center,
                 ),

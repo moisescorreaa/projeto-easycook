@@ -81,14 +81,6 @@ flutter:
     - assets/default_transparent_1000x1000.png
     - assets/favicon_32x32.png
     - assets/favicon_transparent_32x32.png
-    - assets/success.gif
-    - assets/pacoca.jpg
-    - assets/pizza-margherita.jpg
-    - assets/bolo-chocolate.jpg
-    - assets/escondidinho-camarao.jpg
-    - assets/lasanha-italiana.jpg
-    - assets/mousse-maracuja.jpg
-    - assets/smoothie.png
     - assets/user.png
     - assets/default_transparent_cortada_ico.png
     
