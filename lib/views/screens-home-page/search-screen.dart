@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easycook_main/views/screens-home-page/home-detail-screen.dart';
+import 'package:easycook_main/views/screens-home-page/result-screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -11,7 +12,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
-  String? busca;
+  List<String> busca = [];
 
   void navigateToHomeRecipeDetail(DocumentSnapshot recipeDocument) {
     Navigator.push(
@@ -25,8 +26,18 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void searchRecipes() {
     setState(() {
-      busca = _searchController.text.toLowerCase();
+      busca = _searchController.text
+          .split(',')
+          .map((ingredient) => ingredient.trim().toLowerCase())
+          .toList();
     });
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultadoPesquisaScreen(ingredientes: busca),
+      ),
+    );
   }
 
   @override
@@ -53,14 +64,17 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width - 8,
+                width: MediaQuery.of(context).size.width - 50,
                 height: 50,
                 child: TextFormField(
+                  textAlign: TextAlign.start,
                   controller: _searchController,
                   decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.search_outlined),
-                      onPressed: searchRecipes,
+                    hintText:
+                        "Digite os ingredientes disponíveis separados por vírgula",
+                    hintStyle: TextStyle(
+                      color: Color(0xFF757575),
+                      fontWeight: FontWeight.bold,
                     ),
                     labelStyle: TextStyle(
                       color: Color(0xFF757575),
@@ -71,6 +85,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ),
+              ),
+              IconButton(
+                icon: Icon(Icons.search_outlined),
+                onPressed: searchRecipes,
               ),
             ],
           ),

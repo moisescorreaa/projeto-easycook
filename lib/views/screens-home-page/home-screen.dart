@@ -183,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       IconButton(
                                         icon: Icon(
-                                          Icons.favorite,
+                                          Icons.favorite_border,
                                           color: Colors.red,
                                         ),
                                         onPressed: () {
