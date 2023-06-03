@@ -194,7 +194,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                             : Image.network(imagemAntiga!)),
                   ),
                 ),
-                Container(child: Text("Titulo")),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(child: Text("Titulo")),
+                    ],
+                  ),
+                ),
                 TextFormField(
                   validator: _validarCampos,
                   controller: tituloController,
@@ -209,7 +217,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                         EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   ),
                 ),
-                Container(child: Text("Descrição")),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(child: Text("Descrição")),
+                    ],
+                  ),
+                ),
                 TextFormField(
                   validator: _validarCampos,
                   controller: descricaoController,
@@ -224,7 +240,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                         EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                   ),
                 ),
-                Container(child: Text("Ingredientes")),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(child: Text("Ingredientes")),
+                    ],
+                  ),
+                ),
                 Row(
                   children: [
                     Expanded(
@@ -280,7 +304,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                     );
                   },
                 ),
-                Container(child: Text("Modo de Preparo")),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(child: Text("Modo de Preparo")),
+                    ],
+                  ),
+                ),
                 TextFormField(
                   validator: _validarCampos,
                   controller: modoController,
@@ -296,7 +328,15 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                   ),
                   maxLines: null,
                 ),
-                Container(child: Text("Tempo de Preparo")),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(child: Text("Tempo de Preparo")),
+                    ],
+                  ),
+                ),
                 TextFormField(
                   validator: _validarCampos,
                   controller: tempoController,

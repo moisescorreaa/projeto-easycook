@@ -86,7 +86,7 @@ class _AddScreenState extends State<AddScreen> {
           'ingredientes': ingredientes,
           'tempo': tempo,
           'modo': modo,
-          'curtidas': 0,
+          'curtidas': [],
           'dateTime': DateTime.now(),
         });
 

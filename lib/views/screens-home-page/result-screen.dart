@@ -151,7 +151,7 @@ class _ResultadoPesquisaScreenState extends State<ResultadoPesquisaScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Center(
                                     child: Text(
-                                      '${curtidas.toString()} ${curtidas == 1 ? "curtida" : "curtidas"}',
+                                      '${curtidas.length.toString()} ${curtidas.length == 1 ? "curtida" : "curtidas"}',
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.normal,

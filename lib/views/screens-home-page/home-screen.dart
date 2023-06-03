@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easycook_main/views/screens-home-page/home-detail-screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
@@ -63,8 +66,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void updateLikes(DocumentSnapshot document, List<String> likes) {
+    FirebaseFirestore.instance
+        .collection('receitas')
+        .doc(document.id)
+        .update({'curtidas': likes});
+  }
+
   @override
   Widget build(BuildContext context) {
+    final uid = auth
+        .currentUser?.uid; // Substitua pelo UID do usuário atualmente logado
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -110,7 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       final imageUrl = document['imageUrl'];
                       final titulo = document['titulo'];
                       final descricao = document['descricao'];
-                      final curtidas = document['curtidas'];
+
+                      List<String> likes = [];
+                      if (document['curtidas'] != null) {
+                        likes = List<String>.from(document['curtidas']);
+                      }
 
                       return Card(
                         shape: RoundedRectangleBorder(
@@ -124,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
                               child: Row(
                                 children: [
-                                  CircleAvatar(backgroundColor: Colors.transparent,
+                                  CircleAvatar(
+                                    backgroundColor: Colors.transparent,
                                     backgroundImage: NetworkImage(photoUser),
                                     maxRadius: 10,
                                   ),
@@ -174,45 +192,75 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              padding:
+                                  EdgeInsets.only(left: 16, top: 8, bottom: 16),
                               child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            // Atualize as curtidas no Firestore
-                                          });
-                                        },
-                                      ),
-                                      Text(
-                                        '${curtidas.toString()} ${curtidas == 1 ? "curtida" : "curtidas"}',
+                                  StreamBuilder<DocumentSnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('receitas')
+                                        .doc(document.id)
+                                        .snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final likes =
+                                            (snapshot.data!['curtidas']
+                                                    as List<dynamic>)
+                                                .map((uid) => uid.toString())
+                                                .toList();
+                                        final isLiked = likes.contains(uid);
+
+                                        return IconButton(
+                                          icon: Icon(
+                                            isLiked
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: Colors.red,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              if (isLiked) {
+                                                // Remove a curtida do usuário
+                                                likes.remove(uid);
+                                              } else {
+                                                // Adicione a curtida do usuário
+                                                likes.add(uid!);
+                                              }
+                                              // Atualize as curtidas no Firestore
+                                              updateLikes(document, likes);
+                                            });
+                                          },
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                  Text(
+                                    '${likes.length.toString()} ${likes.length == 1 ? "curtida" : "curtidas"}',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 16),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        // Navegue para a tela de detalhes da receita
+                                        navigateToHomeRecipeDetail(document);
+                                      },
+                                      child: Text(
+                                        'Ver receita',
                                         style: TextStyle(
                                           fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      // Navegue para a tela de detalhes da receita
-                                      navigateToHomeRecipeDetail(document);
-                                    },
-                                    child: Text(
-                                      'Ver receita',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
