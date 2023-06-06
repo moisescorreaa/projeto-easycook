@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ResultadoPesquisaScreen extends StatefulWidget {
-  final List<String> ingredientes;
+  final String? ingredientes;
 
   ResultadoPesquisaScreen({required this.ingredientes});
 
@@ -23,48 +23,18 @@ class _ResultadoPesquisaScreenState extends State<ResultadoPesquisaScreen> {
     searchRecipes();
   }
 
-  // void searchRecipes() {
-  //   FirebaseFirestore.instance
-  //       .collection('receitas')
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     setState(() {
-  //       recipes = querySnapshot.docs;
-  //       filteredRecipes = recipes.where((recipe) {
-  //         final List<String> ingredientsLowerCase = recipe['ingredientes']
-  //             .map<String>((ingredient) => ingredient.toString().toLowerCase())
-  //             .toList();
-
-  //         return widget.ingredientes.every((searchIngredient) =>
-  //             ingredientsLowerCase.contains(searchIngredient));
-  //       }).toList();
-  //     });
-  //   }).catchError((error) {
-  //     print('Erro ao buscar receitas: $error');
-  //   });
-  // }
   void searchRecipes() {
-  FirebaseFirestore.instance
-      .collection('receitas')
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    setState(() {
-      recipes = querySnapshot.docs;
-      filteredRecipes = recipes.where((recipe) {
-        final List<String> ingredientsLowerCase = recipe['ingredientes']
-            .map<String>((ingredient) => ingredient.toString().toLowerCase())
-            .toList();
-
-        return widget.ingredientes.every((searchIngredient) =>
-            ingredientsLowerCase.any((ingredient) =>
-                ingredient.contains(searchIngredient.trim().toLowerCase())));
-      }).toList();
-    });
-  }).catchError((error) {
-    print('Erro ao buscar receitas: $error');
-  });
-}
-
+    FirebaseFirestore.instance
+        .collection('receitas')
+        .where('ingredientes', arrayContainsAny: widget.ingredientes!.split(','))
+        .snapshots()
+        .listen((snapshot) {
+          setState(() {
+            recipes = snapshot.docs;
+            filteredRecipes = recipes;
+          });
+        });
+  }
 
   void navigateToHomeRecipeDetail(DocumentSnapshot recipeDocument) {
     Navigator.push(

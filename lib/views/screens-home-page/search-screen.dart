@@ -12,7 +12,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
-  List<String> busca = [];
+  String? busca;
 
   void navigateToHomeRecipeDetail(DocumentSnapshot recipeDocument) {
     Navigator.push(
@@ -26,10 +26,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void searchRecipes() {
     setState(() {
-      busca = _searchController.text
-          .split(',')
-          .map((ingredient) => ingredient.trim().toLowerCase())
-          .toList();
+      busca = _searchController.text;
+          
     });
 
     Navigator.push(
@@ -71,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText:
-                        "Digite os ingredientes disponíveis separados por vírgula",
+                        "Digite o ingrediente que deseja filtrar",
                     hintStyle: TextStyle(
                       color: Color(0xFF757575),
                       fontWeight: FontWeight.bold,
@@ -106,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   final List<QueryDocumentSnapshot> recipes =
                       snapshot.data!.docs;
 
-                  // Ordenar as receitas localmente com base no número de curtidas e compara 
+                  // Ordenar as receitas localmente com base no número de curtidas e compara
                   recipes.sort((a, b) {
                     final List<String> curtidasA =
                         List<String>.from(a['curtidas'] ?? []);
