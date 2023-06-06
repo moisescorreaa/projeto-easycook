@@ -67,7 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 width: MediaQuery.of(context).size.width - 50,
                 height: 50,
                 child: TextFormField(
-                  textAlign: TextAlign.start,
+                  textAlignVertical: TextAlignVertical.top,
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText:
@@ -83,6 +83,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
+                    filled: true,
+                    fillColor: Color(0xFFF2F2F2),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   ),
                 ),
               ),
@@ -95,14 +99,21 @@ class _SearchScreenState extends State<SearchScreen> {
           SizedBox(height: 20),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('receitas')
-                  .orderBy('curtidas', descending: true)
-                  .snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('receitas').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final List<QueryDocumentSnapshot> recipes =
                       snapshot.data!.docs;
+
+                  // Ordenar as receitas localmente com base no número de curtidas e compara 
+                  recipes.sort((a, b) {
+                    final List<String> curtidasA =
+                        List<String>.from(a['curtidas'] ?? []);
+                    final List<String> curtidasB =
+                        List<String>.from(b['curtidas'] ?? []);
+                    return curtidasB.length.compareTo(curtidasA.length);
+                  });
                   return SingleChildScrollView(
                     child: Column(
                       children: [
@@ -143,7 +154,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               final document = recipes[index];
                               final imageUrl = document['imageUrl'];
                               final titulo = document['titulo'];
-                              final curtidas = document['curtidas'];
+                              final curtidas =
+                                  List<String>.from(document['curtidas'] ?? []);
                               return Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: GestureDetector(

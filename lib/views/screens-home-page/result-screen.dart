@@ -23,26 +23,48 @@ class _ResultadoPesquisaScreenState extends State<ResultadoPesquisaScreen> {
     searchRecipes();
   }
 
-  void searchRecipes() {
-    FirebaseFirestore.instance
-        .collection('receitas')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      setState(() {
-        recipes = querySnapshot.docs;
-        filteredRecipes = recipes.where((recipe) {
-          final List<String> ingredientsLowerCase = recipe['ingredientes']
-              .map<String>((ingredient) => ingredient.toString().toLowerCase())
-              .toList();
+  // void searchRecipes() {
+  //   FirebaseFirestore.instance
+  //       .collection('receitas')
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     setState(() {
+  //       recipes = querySnapshot.docs;
+  //       filteredRecipes = recipes.where((recipe) {
+  //         final List<String> ingredientsLowerCase = recipe['ingredientes']
+  //             .map<String>((ingredient) => ingredient.toString().toLowerCase())
+  //             .toList();
 
-          return widget.ingredientes.every((searchIngredient) =>
-              ingredientsLowerCase.contains(searchIngredient));
-        }).toList();
-      });
-    }).catchError((error) {
-      print('Erro ao buscar receitas: $error');
+  //         return widget.ingredientes.every((searchIngredient) =>
+  //             ingredientsLowerCase.contains(searchIngredient));
+  //       }).toList();
+  //     });
+  //   }).catchError((error) {
+  //     print('Erro ao buscar receitas: $error');
+  //   });
+  // }
+  void searchRecipes() {
+  FirebaseFirestore.instance
+      .collection('receitas')
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    setState(() {
+      recipes = querySnapshot.docs;
+      filteredRecipes = recipes.where((recipe) {
+        final List<String> ingredientsLowerCase = recipe['ingredientes']
+            .map<String>((ingredient) => ingredient.toString().toLowerCase())
+            .toList();
+
+        return widget.ingredientes.every((searchIngredient) =>
+            ingredientsLowerCase.any((ingredient) =>
+                ingredient.contains(searchIngredient.trim().toLowerCase())));
+      }).toList();
     });
-  }
+  }).catchError((error) {
+    print('Erro ao buscar receitas: $error');
+  });
+}
+
 
   void navigateToHomeRecipeDetail(DocumentSnapshot recipeDocument) {
     Navigator.push(
