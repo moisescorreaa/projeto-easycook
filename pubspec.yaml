@@ -43,12 +43,24 @@ dependencies:
   image_picker:
   file_picker:
   flutter_native_splash:
+  flutter_launcher_icons:
  
 
 
 flutter_native_splash:
   color: "#F5F5F5"
-  image: assets\default_765x625.png
+  image: "assets/default_765x625.png"
+  android: true
+  ios: true
+
+flutter_icons:
+  image_path: "assets/default_765x625.png"
+  ios: true
+  remove_alpha_ios: true
+  android: "launcher_icon"
+  adaptive_icon_background: "#F5F5F5"
+  adaptive_icon_foreground: "assets/default_transparent_765x625.png"
+
 
 
 
