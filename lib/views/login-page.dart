@@ -159,10 +159,11 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(50),
-                    child: Transform.scale(
-                      scale: 2.0, // duplica o tamanho
-                      child:
-                          Image.asset('assets/favicon_transparent_32x32.png'),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      child: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fdefault_transparent_cortada_ico.png?alt=media&token=7a520e24-beb9-4e3c-abf0-b41bc1c6eb70&_gl=1*1eu811y*_ga*MTg4NDE3NTI2OC4xNjg1NDg4NzUw*_ga_CW55HF8NVT*MTY4NTgyNjUxMC4xNi4xLjE2ODU4Mjk2ODIuMC4wLjA.'),
                     ),
                   ),
                 ],

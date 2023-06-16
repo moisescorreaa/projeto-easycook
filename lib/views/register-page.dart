@@ -1,4 +1,3 @@
-import 'package:easycook_main/model/usuarios.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
@@ -110,16 +109,16 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void salvarDadosUsuario() {
-    String username = usuarioController.text;
+    try {
+      String username = usuarioController.text;
 
-    Usuarios novoUsuario = Usuarios(
-      usernameUsuario: username,
-      id: auth.currentUser!.uid,
-      fotoPerfil:
-          'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fuser.png?alt=media&token=882e3a0b-9075-4ad0-a527-9ee628d8ea29',
-    );
-    auth.currentUser?.updateDisplayName(novoUsuario.usernameUsuario);
-    auth.currentUser?.updatePhotoURL(novoUsuario.fotoPerfil);
+      auth.currentUser?.updateDisplayName(username);
+      auth.currentUser?.updatePhotoURL(
+        'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fuser.png?alt=media&token=882e3a0b-9075-4ad0-a527-9ee628d8ea29',
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   registrar(BuildContext context) async {
@@ -215,10 +214,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(50),
-                    child: Transform.scale(
-                      scale: 2.0, // duplica o tamanho
-                      child:
-                          Image.asset('assets/favicon_transparent_32x32.png'),
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      child: Image.network(
+                          'https://firebasestorage.googleapis.com/v0/b/easy-cook-2117a.appspot.com/o/imagesPadrao%2Fdefault_transparent_cortada_ico.png?alt=media&token=7a520e24-beb9-4e3c-abf0-b41bc1c6eb70&_gl=1*1rzls6p*_ga*MTg4NDE3NTI2OC4xNjg1NDg4NzUw*_ga_CW55HF8NVT*MTY4NTgyNjUxMC4xNi4xLjE2ODU4Mjk2ODEuMC4wLjA.'),
                     ),
                   ),
                 ],
