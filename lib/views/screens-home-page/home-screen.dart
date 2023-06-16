@@ -11,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore db =  FirebaseFirestore.instance;
+
 
   @override
   void initState() {
@@ -67,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void updateLikes(DocumentSnapshot document, List<String> likes) {
-    FirebaseFirestore.instance
+    db
         .collection('receitas')
         .doc(document.id)
         .update({'curtidas': likes});
@@ -106,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
+              stream: db
                   .collection('receitas')
                   .where('dateTime', isGreaterThanOrEqualTo: startDate)
                   .snapshots(),
@@ -199,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MainAxisAlignment.start,
                                 children: [
                                   StreamBuilder<DocumentSnapshot>(
-                                    stream: FirebaseFirestore.instance
+                                    stream: db
                                         .collection('receitas')
                                         .doc(document.id)
                                         .snapshots(),

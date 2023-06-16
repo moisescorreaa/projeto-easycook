@@ -12,6 +12,9 @@ class HomeRecipeDetailScreen extends StatefulWidget {
 }
 
 class _HomeRecipeDetailScreenState extends State<HomeRecipeDetailScreen> {
+ 
+
+
   @override
   Widget build(BuildContext context) {
     final titulo = widget.recipeDocument['titulo'];
