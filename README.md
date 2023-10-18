@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # projeto-easycook
 
 ## EasyCook App
@@ -16,7 +15,6 @@ Este aplicativo é um repositório de receitas que permite aos usuários pesquis
 * Flutter
 * Dart
 * Firebase
-=======
 # projeto-easycook
 
 ## EasyCook App
